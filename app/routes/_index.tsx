@@ -1,41 +1,31 @@
 import type { MetaFunction } from "@remix-run/node";
+import { viasCategoryCodes } from "~/lib/VisaCategoryCodes";
+import { CategoryCard } from "../components/VisaCategoryCard";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Canada Visa Tracker" },
+    {
+      name: "description",
+      content:
+        "Unofficial tracker for processing times for different Canadian Visas",
+    },
   ];
 };
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    <div>
+      <h1 className="text-2xl">Canada Visa Processing times</h1>
+      <p>
+        This is an unofficial website that shows the latest processing times for
+        Canadian visas.
+      </p>
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
+        {viasCategoryCodes.map((categoryCode) => (
+          <CategoryCard key={categoryCode} categoryCode={categoryCode} />
+        ))}
+      </div>
     </div>
   );
 }
