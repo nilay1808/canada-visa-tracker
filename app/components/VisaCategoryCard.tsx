@@ -11,7 +11,7 @@ interface CategoryCardProps {
 
 export function CategoryCard({ categoryCode }: CategoryCardProps) {
   return (
-    <Link to={`/${categoryCode}`}>
+    <Link to={`/visa/${categoryCode}`}>
       <Card className="p-4">
         <h3 className="text-lg font-medium">
           {getTitleForCategoryCode(categoryCode)} Visa
