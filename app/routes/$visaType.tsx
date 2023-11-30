@@ -1,12 +1,13 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import type { VisaCategoryCode } from "~/lib/VisaCategoryCodes";
 import { assertValidVisaCategoryCode } from "~/lib/VisaCategoryCodes";
 import { ProcessingTimeTable } from "../components/ProcessingTimesTable";
+import { Await, useLoaderData } from "@remix-run/react";
+import { Suspense } from "react";
+import { Skeleton } from "../components/ui/skeleton";
+import { defer } from "@remix-run/node";
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const visaType = params.visaType;
-  assertValidVisaCategoryCode(visaType);
-
+async function getProcessingTimes(visaType: VisaCategoryCode) {
   const [processingTimeReq, countryCodeToNameReq] = await Promise.all([
     fetch(
       "https://www.canada.ca/content/dam/ircc/documents/json/data-ptime-en.json"
@@ -38,19 +39,35 @@ export async function loader({ params }: LoaderFunctionArgs) {
       })
     ),
     lastUpdated,
-    visaType,
   };
 }
 
+export async function loader({ params }: LoaderFunctionArgs) {
+  const visaType = params.visaType;
+  assertValidVisaCategoryCode(visaType);
+
+  return defer({
+    visaType,
+    processingTimeData: getProcessingTimes(visaType),
+  });
+}
+
 export default function VisaProcessingTimes() {
-  const { visaType, processingTimes, lastUpdated } =
-    useLoaderData<typeof loader>();
+  const { visaType, processingTimeData } = useLoaderData<typeof loader>();
 
   return (
-    <ProcessingTimeTable
-      title={`Processing Times for ${visaType} visa`}
-      lastUpdated={lastUpdated}
-      processingTimes={processingTimes}
-    />
+    <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
+      <Await resolve={processingTimeData}>
+        {({ lastUpdated, processingTimes }) => (
+          <div>
+            <ProcessingTimeTable
+              title={`Processing Times for ${visaType} visa`}
+              lastUpdated={lastUpdated}
+              processingTimes={processingTimes}
+            />
+          </div>
+        )}
+      </Await>
+    </Suspense>
   );
 }
