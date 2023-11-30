@@ -1,11 +1,18 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { HeadersFunction, LoaderFunctionArgs } from "@remix-run/node";
 import type { VisaCategoryCode } from "~/lib/VisaCategoryCodes";
-import { assertValidVisaCategoryCode } from "~/lib/VisaCategoryCodes";
+import {
+  assertValidVisaCategoryCode,
+  getTitleForCategoryCode,
+} from "~/lib/VisaCategoryCodes";
 import { ProcessingTimeTable } from "../components/ProcessingTimesTable";
 import { Await, useLoaderData } from "@remix-run/react";
 import { Suspense } from "react";
 import { Skeleton } from "../components/ui/skeleton";
 import { defer } from "@remix-run/node";
+
+export const headers: HeadersFunction = () => ({
+  "Cache-Control": "max-age=300, s-maxage=3600",
+});
 
 async function getProcessingTimes(visaType: VisaCategoryCode) {
   const [processingTimeReq, countryCodeToNameReq] = await Promise.all([
@@ -61,7 +68,9 @@ export default function VisaProcessingTimes() {
         {({ lastUpdated, processingTimes }) => (
           <div>
             <ProcessingTimeTable
-              title={`Processing Times for ${visaType} visa`}
+              title={`Processing Times for ${getTitleForCategoryCode(
+                visaType
+              )} visa`}
               lastUpdated={lastUpdated}
               processingTimes={processingTimes}
             />
