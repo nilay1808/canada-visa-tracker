@@ -8,6 +8,7 @@
     "sleepApplication": false,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
-    "startCommand": "pnpm start:cron"
+    "startCommand": "pnpm start:cron",
+    "cronSchedule": "*/30 * * * *"
   }
 }
