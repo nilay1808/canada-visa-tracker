@@ -4,6 +4,8 @@
   "compilerOptions": {
     "lib": ["ES2015"],
     "baseUrl": ".",
-    "outDir": "dist"
+    "outDir": "dist",
+    "allowImportingTsExtensions": false,
+    "noEmit": false
   }
 }
