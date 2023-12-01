@@ -1,14 +1,15 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "builder": "NIXPACKS"
+    "builder": "NIXPACKS",
+    "buildCommand": "pnpm run build:cron"
   },
   "deploy": {
     "numReplicas": 1,
     "sleepApplication": false,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
-    "startCommand": "pnpm start:cron",
+    "startCommand": "pnpm run start:cron",
     "cronSchedule": "*/10 * * * *"
   }
 }

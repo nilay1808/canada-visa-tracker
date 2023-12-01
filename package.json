@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
+    "build:web": "turbo build --filter=web",
+    "build:cron": "turbo build --filter=cron",
     "dev": "turbo dev",
     "start:web": "turbo start --filter=web",
     "start:cron": "turbo start --filter=cron",
