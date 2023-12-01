@@ -1,0 +1,9 @@
+{
+  "include": ["**/*.ts", "**/*.tsx"],
+  "extends": "tsconfig/base.json",
+  "compilerOptions": {
+    "lib": ["ES2015"],
+    "baseUrl": ".",
+    "outDir": "dist"
+  }
+}
