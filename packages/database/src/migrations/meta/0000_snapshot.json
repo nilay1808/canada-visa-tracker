@@ -1,0 +1,95 @@
+{
+  "id": "6deb2400-7f62-49d5-b155-2a645a4849bc",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "processing_times": {
+      "name": "processing_times",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "published_at": {
+          "name": "published_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "country_code": {
+          "name": "country_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visa_type": {
+          "name": "visa_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "estimate_time": {
+          "name": "estimate_time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "country_code_visa_type_idx": {
+          "name": "country_code_visa_type_idx",
+          "columns": [
+            "country_code",
+            "visa_type"
+          ],
+          "isUnique": false
+        },
+        "visa_type_published_at_idx": {
+          "name": "visa_type_published_at_idx",
+          "columns": [
+            "visa_type",
+            "published_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "processing_times_country_code_visa_type_published_at_unique": {
+          "name": "processing_times_country_code_visa_type_published_at_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "country_code",
+            "visa_type",
+            "published_at"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}
