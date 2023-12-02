@@ -21,3 +21,12 @@ export async function migrateDb() {
 
   await migrationClient.end();
 }
+
+migrateDb()
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  })
+  .finally(() => {
+    process.exit(0);
+  });
