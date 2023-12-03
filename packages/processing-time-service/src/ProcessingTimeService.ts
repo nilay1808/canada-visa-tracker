@@ -56,6 +56,7 @@ export class ProcessingTimeService {
     await db
       .insert(processingTimesTable)
       .values(processingTimesArray)
+      .onConflictDoNothing()
       .returning();
   }
 }
