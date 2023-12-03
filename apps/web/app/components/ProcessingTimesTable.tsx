@@ -2,7 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "./ui/data-table";
 
 interface ProcessingTimeForCountry {
-  processingTime: string;
+  estimateTime: string;
   countryName: string;
   countryCode: string;
 }
@@ -13,7 +13,7 @@ const columns: ColumnDef<ProcessingTimeForCountry>[] = [
     header: "🌎 Country",
   },
   {
-    accessorKey: "processingTime",
+    accessorKey: "estimateTime",
     header: "🕰️ Latest Processing time",
   },
 ];
@@ -33,7 +33,7 @@ export const ProcessingTimeTable = ({
     <div>
       <div className="flex flex-col sm:flex-row justify-between align-middle items-center">
         <h2 className="text-xl text-center sm:text-left my-2">{title}</h2>
-        <p className="text-sm">Last Updated: {lastUpdated}</p>
+        <p className="text-sm">Last Updated: {lastUpdated.toString()}</p>
       </div>
       <DataTable
         columns={columns}

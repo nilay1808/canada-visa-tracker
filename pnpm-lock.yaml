@@ -146,6 +146,9 @@ importers:
       database:
         specifier: workspace:*
         version: link:../database
+      drizzle-orm:
+        specifier: ^0.29.1
+        version: 0.29.1(postgres@3.4.3)
     devDependencies:
       tsconfig:
         specifier: workspace:*

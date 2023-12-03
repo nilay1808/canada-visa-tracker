@@ -1,3 +1,5 @@
+import { eq, and, desc } from "drizzle-orm";
+
 import { db, processingTimesTable } from "database";
 
 export interface RawProcessingTimeData {
@@ -58,6 +60,43 @@ export class ProcessingTimeService {
       .values(processingTimesArray)
       .onConflictDoNothing()
       .returning();
+  }
+
+  async getLatestProcessingTimesForVisaType(visaType: string) {
+    // Latest published at for the visa type
+    const [{ publishedAt }] = await db
+      .select({
+        publishedAt: processingTimesTable.publishedAt,
+      })
+      .from(processingTimesTable)
+      .where(eq(processingTimesTable.visaType, visaType))
+      .orderBy(desc(processingTimesTable.publishedAt))
+      .limit(1);
+
+    const processingTimesData = await db
+      .select({
+        countryCode: processingTimesTable.countryCode,
+        countryName: processingTimesTable.countryName,
+        estimateTime: processingTimesTable.estimateTime,
+      })
+      .from(processingTimesTable)
+      .where(
+        and(
+          eq(processingTimesTable.visaType, visaType),
+          eq(processingTimesTable.publishedAt, publishedAt)
+        )
+      );
+
+    return {
+      publishedAt,
+      processingTimes: processingTimesData.map(
+        ({ countryCode, countryName, estimateTime }) => ({
+          countryCode,
+          countryName: countryName ?? countryCode,
+          estimateTime,
+        })
+      ),
+    };
   }
 }
 
