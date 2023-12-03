@@ -22,12 +22,12 @@ async function main() {
 
   const processingTimeService = new ProcessingTimeService();
 
-  // await processingTimeService.saveAllProcessingTimes(
-  //   processingTime as RawProcessingTimeData,
-  //   (countryCodeToNameObj as Record<string, Record<string, string>>)[
-  //     "country-name"
-  //   ] as Record<string, string>
-  // );
+  await processingTimeService.saveAllProcessingTimes(
+    processingTime as RawProcessingTimeData,
+    (countryCodeToNameObj as Record<string, Record<string, string>>)[
+      "country-name"
+    ] as Record<string, string>
+  );
 
   console.log("Cron job finished");
 }
