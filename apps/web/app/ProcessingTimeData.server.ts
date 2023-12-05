@@ -18,13 +18,30 @@ export async function getProcessingTimesDataForVisaType(visaType: string) {
   };
 }
 
-export function getHistoricalProcessingTimes(
+export async function getHistoricalProcessingTimes(
   visaType: string,
   countryCode: string
 ) {
   const processingTimeService = new ProcessingTimeService();
-  return processingTimeService.getHistoricalProcessingTimes(
-    visaType,
-    countryCode
-  );
+  const historicalProcessingTimes =
+    await processingTimeService.getHistoricalProcessingTimes(
+      visaType,
+      countryCode
+    );
+  return historicalProcessingTimes.map((processingTime) => ({
+    ...processingTime,
+    publishedAt: prettyDateString(processingTime.publishedAt),
+  }));
+}
+
+function prettyDateString(date: Date) {
+  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+
+  const options: Intl.DateTimeFormatOptions = {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  };
+
+  return date.toLocaleDateString("en-US", options);
 }
