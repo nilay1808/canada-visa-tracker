@@ -119,7 +119,8 @@ export class ProcessingTimeService {
           eq(processingTimesTable.visaType, visaType),
           eq(processingTimesTable.countryCode, countryCode)
         )
-      );
+      )
+      .orderBy(desc(processingTimesTable.publishedAt));
 
     return data;
   }
