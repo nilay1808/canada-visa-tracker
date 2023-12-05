@@ -14,7 +14,7 @@ export const processingTimesTable = pgTable(
     id: uuid("id").defaultRandom().primaryKey(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
-    publishedAt: date("published_at").notNull(),
+    publishedAt: date("published_at", { mode: "date" }).notNull(),
     countryCode: text("country_code").notNull(),
     countryName: text("country_name"),
     visaType: text("visa_type").notNull(),

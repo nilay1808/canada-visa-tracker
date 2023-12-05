@@ -8,7 +8,7 @@ import { Await, useLoaderData } from "@remix-run/react";
 import { Suspense } from "react";
 import { Skeleton } from "../components/ui/skeleton";
 import { defer } from "@remix-run/node";
-import { getProcessingTimeData } from "../getProcessingTimeData.server";
+import { getProcessingTimesDataForVisaType } from "../ProcessingTimeData.server";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const visaType = params.visaType;
@@ -16,7 +16,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   return defer({
     visaType,
-    processingTimeData: getProcessingTimeData(visaType),
+    processingTimeData: getProcessingTimesDataForVisaType(visaType),
   });
 }
 

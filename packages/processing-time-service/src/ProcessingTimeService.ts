@@ -38,6 +38,10 @@ export class ProcessingTimeService {
             return;
           }
 
+          if (countryCode === "lastupdated") {
+            return;
+          }
+
           const estimateTime = categoryData[countryCode] as string;
 
           if (estimateTime === "No processing time available") {
@@ -49,7 +53,7 @@ export class ProcessingTimeService {
             countryName: countryCodeToName[countryCode],
             visaType,
             estimateTime,
-            publishedAt,
+            publishedAt: new Date(publishedAt),
           };
         });
       })
@@ -88,15 +92,36 @@ export class ProcessingTimeService {
       );
 
     return {
-      publishedAt,
+      publishedAt: publishedAt.toLocaleDateString(),
       processingTimes: processingTimesData.map(
         ({ countryCode, countryName, estimateTime }) => ({
           countryCode,
           countryName: countryName ?? countryCode,
           estimateTime,
+          visaType,
         })
       ),
     };
+  }
+
+  async getHistoricalProcessingTimes(visaType: string, countryCode: string) {
+    const data = await db
+      .select({
+        publishedAt: processingTimesTable.publishedAt,
+        estimateTime: processingTimesTable.estimateTime,
+        countryName: processingTimesTable.countryName,
+        countryCode: processingTimesTable.countryCode,
+        visaType: processingTimesTable.visaType,
+      })
+      .from(processingTimesTable)
+      .where(
+        and(
+          eq(processingTimesTable.visaType, visaType),
+          eq(processingTimesTable.countryCode, countryCode)
+        )
+      );
+
+    return data;
   }
 }
 

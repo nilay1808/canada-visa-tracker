@@ -1,10 +1,12 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "./ui/data-table";
+import { Link } from "@remix-run/react";
 
 interface ProcessingTimeForCountry {
   estimateTime: string;
   countryName: string;
-  countryCode: string;
+  // countryCode: string;
+  historicalViewLink: string;
 }
 
 const columns: ColumnDef<ProcessingTimeForCountry>[] = [
@@ -15,6 +17,13 @@ const columns: ColumnDef<ProcessingTimeForCountry>[] = [
   {
     accessorKey: "estimateTime",
     header: "🕰️ Latest Processing time",
+  },
+  {
+    header: "Historical Data",
+    accessorKey: "historicalViewLink",
+    cell: ({ row }) => {
+      return <Link to={row.getValue("historicalViewLink")}>View</Link>;
+    },
   },
 ];
 
