@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "postinstall": "pnpm db:generate",
-    "build": "tsup && pnpm db:migrate",
+    "build": "tsup",
     "dev": "pnpm db:up && tsup --watch",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate:pg",

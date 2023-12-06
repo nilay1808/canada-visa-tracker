@@ -8,7 +8,7 @@
     "dev": "dotenv -e .env.local -- turbo dev",
     "start:web": "turbo start --filter=web",
     "start:cron": "turbo start --filter=cron",
-    "typecheck": "turbo typecheck"
+    "typecheck": "dotenv -e .env.local -- turbo typecheck"
   },
   "devDependencies": {
     "dotenv-cli": "^7.3.0",
@@ -16,5 +16,9 @@
     "turbo": "^1.10.16",
     "typescript": "^5.1.6"
   },
-  "packageManager": "pnpm@8.6.6"
+  "packageManager": "pnpm@8.6.6",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }
