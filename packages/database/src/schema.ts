@@ -1,6 +1,7 @@
 import {
   date,
   index,
+  interval,
   pgTable,
   text,
   timestamp,
@@ -19,6 +20,7 @@ export const processingTimesTable = pgTable(
     countryName: text("country_name"),
     visaType: text("visa_type").notNull(),
     estimateTime: text("estimate_time").notNull(),
+    estimate: interval("estimate"),
   },
   (t) => ({
     unq: unique().on(t.countryCode, t.visaType, t.publishedAt),

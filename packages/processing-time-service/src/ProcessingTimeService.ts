@@ -44,7 +44,10 @@ export class ProcessingTimeService {
 
           const estimateTime = categoryData[countryCode] as string;
 
-          if (estimateTime === "No processing time available") {
+          if (
+            estimateTime === "No processing time available" ||
+            estimateTime === "Not enough data"
+          ) {
             return;
           }
 
@@ -54,6 +57,7 @@ export class ProcessingTimeService {
             visaType,
             estimateTime,
             publishedAt: new Date(publishedAt),
+            estimate: estimateTime,
           };
         });
       })

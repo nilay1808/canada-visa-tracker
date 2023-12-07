@@ -1,0 +1,1 @@
+ALTER TABLE "processing_times" ADD COLUMN "estimate" interval;

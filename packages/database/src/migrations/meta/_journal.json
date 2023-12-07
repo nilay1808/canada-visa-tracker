@@ -15,6 +15,13 @@
       "when": 1701562057426,
       "tag": "0001_fluffy_strong_guy",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1701992448049,
+      "tag": "0002_lowly_black_queen",
+      "breakpoints": true
     }
   ]
 }
