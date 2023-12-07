@@ -8,9 +8,8 @@
     "dist/**"
   ],
   "scripts": {
-    "postinstall": "pnpm db:generate",
     "build": "tsup",
-    "dev": "pnpm db:up && tsup --watch",
+    "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate:pg",
     "db:up": "docker-compose up -d",
