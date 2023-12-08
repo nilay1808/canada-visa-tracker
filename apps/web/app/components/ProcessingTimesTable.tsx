@@ -5,7 +5,6 @@ import { Link } from "@remix-run/react";
 interface ProcessingTimeForCountry {
   estimateTime: string;
   countryName: string;
-  // countryCode: string;
   historicalViewLink: string;
 }
 
@@ -42,7 +41,9 @@ export const ProcessingTimeTable = ({
     <div>
       <div className="flex flex-col sm:flex-row justify-between align-middle items-center">
         <h2 className="text-xl text-center sm:text-left my-2">{title}</h2>
-        <p className="text-sm">Last Updated: {lastUpdated.toString()}</p>
+        <p className="text-sm dark:text-gray-300">
+          Last Updated: {lastUpdated.toString()}
+        </p>
       </div>
       <DataTable
         columns={columns}

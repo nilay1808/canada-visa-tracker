@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { viasCategoryCodes } from "~/lib/VisaCategoryCodes";
 import { CategoryCard } from "../components/VisaCategoryCard";
+import { Link } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -16,12 +17,26 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div>
-      <h1 className="text-2xl">Canada Visa Processing times</h1>
-      <p>
-        This is an unofficial website that shows the latest processing times for
-        Canadian visas.
-      </p>
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
+      <div className="mb-12">
+        <h1 className="text-2xl mb-1">
+          Check Processing Times for all Canada Visas
+        </h1>
+        <p className="text-gray-700 dark:text-gray-400">
+          This is an unofficial website that shows the latest and historical
+          processing times for Canadian visas. The{" "}
+          <Link
+            className="hover:underline font-semibold"
+            to="https://www.canada.ca/en/immigration-refugees-citizenship/services/application/check-processing-times.html"
+          >
+            official website
+          </Link>{" "}
+          is a harder to use and shows only the latest processing times.
+        </p>
+      </div>
+
+      <h2 className="text-2xl mb-4">Visa Categories</h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
         {viasCategoryCodes.map((categoryCode) => (
           <CategoryCard key={categoryCode} categoryCode={categoryCode} />
         ))}
