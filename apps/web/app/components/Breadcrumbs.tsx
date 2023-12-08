@@ -1,39 +1,54 @@
-import { Link } from "@remix-run/react";
+import { ChevronRightIcon } from "@radix-ui/react-icons";
+import type { UIMatch } from "@remix-run/react";
+import { Link, useMatches } from "@remix-run/react";
+import { getInfoForVisaType } from "~/lib/VisaCategoryCodes";
 
-interface Path {
-  name: string;
-  url: string;
+function getBreadcrumbSegmentData(match: UIMatch) {
+  if (match.id === "root") {
+    return {
+      name: "Home",
+      url: "/",
+    };
+  } else if (match.id === "routes/visa.$visaType") {
+    return {
+      name: getInfoForVisaType(match.params.visaType!).title,
+      url: `/visa/${match.params.visaType}`,
+    };
+  } else if (match.id === "routes/visa_.$visaType.$countryCode") {
+    return {
+      name: "Historical Processing Times",
+      url: `/visa/${match.params.visaType}/${match.params.countryCode}`,
+    };
+  }
+  throw new Error("Unknown match");
 }
 
-interface Props {
-  path: Path[];
-}
-
-export function Breadcrumbs({ path }: Props) {
+export function Breadcrumbs() {
+  const matches = useMatches();
   return (
-    <div className="breadcrumb">
-      <ul className="flex">
-        {path.map((p, i) => (
-          <li className="flex items-center" key={i}>
-            <Link to={p.url}>{p.name}</Link>
-
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 15 15"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M4.10876 14L9.46582 1H10.8178L5.46074 14H4.10876Z"
-                fill="currentColor"
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <nav aria-label="Breadcrumb" className="mb-4">
+      <ol className="flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+        {matches.map((match, index) => {
+          const { name, url } = getBreadcrumbSegmentData(match);
+          return (
+            <>
+              <li>
+                <Link
+                  className="hover:text-gray-900 dark:hover:text-gray-50"
+                  to={url}
+                >
+                  {name}
+                </Link>
+              </li>
+              {index < matches.length - 1 && (
+                <li>
+                  <ChevronRightIcon className="w-4 h-4" />
+                </li>
+              )}
+            </>
+          );
+        })}
+      </ol>
+    </nav>
   );
 }

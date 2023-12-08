@@ -23,7 +23,7 @@ export function assertValidVisaCategoryCode(
   }
 }
 
-export function getInfoForVisaType(visaType: VisaType) {
+export function getInfoForVisaType(visaType: string) {
   assertValidVisaCategoryCode(visaType);
   switch (visaType) {
     case "visitor-outside-canada":

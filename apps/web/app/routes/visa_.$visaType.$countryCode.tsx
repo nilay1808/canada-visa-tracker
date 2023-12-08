@@ -7,6 +7,7 @@ import {
 } from "~/lib/VisaCategoryCodes";
 import { getHistoricalProcessingTimes } from "../ProcessingTimeData.server";
 import { Timeline } from "../components/Timeline";
+import { Breadcrumbs } from "../components/Breadcrumbs";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { visaType, countryCode } = params;
@@ -40,6 +41,7 @@ export default function Page() {
 
   return (
     <div>
+      <Breadcrumbs />
       <h1 className="text-2xl">Historical Processing Times</h1>
       <h2 className="text-xl text-gray-500 dark:text-gray-400">
         For {getInfoForVisaType(visaType).title} Visas submitted in{" "}

@@ -51,9 +51,14 @@ export class ProcessingTimeService {
             return;
           }
 
+          const countryName =
+            countryCode in countryCodeToName
+              ? countryCodeToName[countryCode].replace("&rsquo;", "'")
+              : undefined;
+
           return {
             countryCode,
-            countryName: countryCodeToName[countryCode],
+            countryName,
             visaType,
             estimateTime,
             publishedAt: new Date(publishedAt),
