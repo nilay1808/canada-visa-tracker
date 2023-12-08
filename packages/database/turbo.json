@@ -12,7 +12,6 @@
     "db:migrate": {
       "dependsOn": [
         "db:generate",
-        "db:up",
         "build"
       ]
     },
