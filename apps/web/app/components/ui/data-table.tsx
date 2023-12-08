@@ -28,6 +28,8 @@ import { useState } from "react";
 import { Button } from "./button";
 
 interface DataTableProps<TData, TValue> {
+  title?: string;
+  footer?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterPlaceholder: string;
@@ -35,6 +37,8 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({
+  title = "Table Title",
+  footer,
   columns,
   data,
   filterPlaceholder,
@@ -56,6 +60,11 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
+    initialState: {
+      pagination: {
+        pageSize: 15,
+      },
+    },
   });
 
   const onFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -70,24 +79,28 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder={filterPlaceholder}
-          value={inputValue}
-          onChange={onFilterChange}
-          className="max-w-sm"
-        />
-        {inputValue && (
+      <div className="flex flex-col sm:flex-row items-center justify-between pb-4">
+        <h2 className="text-xl text-center w-full sm:text-left my-2 font-medium">
+          {title}
+        </h2>
+        <div className="inline-flex w-full sm:items-center justify-end">
+          <Input
+            placeholder={filterPlaceholder}
+            value={inputValue}
+            onChange={onFilterChange}
+            className="max-w-sm"
+          />
           <Button
             className="ml-2"
             variant="secondary"
+            disabled={!inputValue}
             onClick={() => {
               onFilterChange({ target: { value: "" } } as any);
             }}
           >
             Clear
           </Button>
-        )}
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -96,7 +109,7 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead className="font-semibold" key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -139,23 +152,28 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+      <div className="w-full inline-flex items-center justify-between">
+        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          {footer}
+        </p>
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -2,7 +2,6 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
   assertValidVisaCategoryCode,
   getInfoForVisaType,
-  getTitleForCategoryCode,
 } from "~/lib/VisaCategoryCodes";
 import { ProcessingTimeTable } from "../components/ProcessingTimesTable";
 import { Await, useLoaderData } from "@remix-run/react";
@@ -10,7 +9,6 @@ import { Suspense } from "react";
 import { Skeleton } from "../components/ui/skeleton";
 import { defer } from "@remix-run/node";
 import { getProcessingTimesDataForVisaType } from "../ProcessingTimeData.server";
-import { Breadcrumbs } from "../components/Breadcrumbs";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const visaType = params.visaType;
@@ -27,18 +25,6 @@ export default function VisaProcessingTimes() {
 
   return (
     <>
-      {/* <Breadcrumbs
-        path={[
-          {
-            name: "Home",
-            url: "/",
-          },
-          {
-            name: getInfoForVisaType(visaType).title,
-            url: `/visa/${visaType}`,
-          },
-        ]}
-      /> */}
       <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
         <Await resolve={processingTimeData}>
           {({ publishedAt, processingTimes }) => (

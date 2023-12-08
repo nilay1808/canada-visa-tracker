@@ -5,7 +5,7 @@ export async function getProcessingTimesDataForVisaType(visaType: string) {
   const { publishedAt, processingTimes } =
     await processingTimeService.getLatestProcessingTimesForVisaType(visaType);
   return {
-    publishedAt,
+    publishedAt: prettyDateString(new Date(publishedAt)),
     processingTimes: processingTimes.map(
       ({ countryCode, countryName, estimateTime }) => {
         return {

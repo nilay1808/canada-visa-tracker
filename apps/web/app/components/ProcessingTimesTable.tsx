@@ -11,11 +11,11 @@ interface ProcessingTimeForCountry {
 const columns: ColumnDef<ProcessingTimeForCountry>[] = [
   {
     accessorKey: "countryName",
-    header: "🌎 Country",
+    header: () => <>🌎 &nbsp; Country</>,
   },
   {
     accessorKey: "estimateTime",
-    header: "🕰️ Latest Processing time",
+    header: "Latest Processing time",
   },
   {
     header: "Historical Data",
@@ -39,13 +39,9 @@ export const ProcessingTimeTable = ({
 }: ProcessingTimeTableProps) => {
   return (
     <div>
-      <div className="flex flex-col sm:flex-row justify-between align-middle items-center">
-        <h2 className="text-xl text-center sm:text-left my-2">{title}</h2>
-        <p className="text-sm dark:text-gray-300">
-          Last Updated: {lastUpdated.toString()}
-        </p>
-      </div>
       <DataTable
+        title={title}
+        footer={`Updated on ${lastUpdated}`}
         columns={columns}
         data={processingTimes}
         filterPlaceholder="Filter by country name (E.x United States)"
