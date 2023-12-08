@@ -32,9 +32,9 @@ export default function VisaProcessingTimes() {
           {({ publishedAt, processingTimes }) => (
             <div>
               <ProcessingTimeTable
-                title={`Latest Processing Times for ${
+                title={`${
                   getInfoForVisaType(visaType).title
-                } Visa`}
+                } Visa Processing Times`}
                 lastUpdated={publishedAt}
                 processingTimes={processingTimes}
               />
