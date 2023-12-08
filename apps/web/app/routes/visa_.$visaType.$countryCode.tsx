@@ -3,7 +3,7 @@ import { useLoaderData } from "@remix-run/react";
 
 import {
   assertValidVisaCategoryCode,
-  getTitleForCategoryCode,
+  getInfoForVisaType,
 } from "~/lib/VisaCategoryCodes";
 import { getHistoricalProcessingTimes } from "../ProcessingTimeData.server";
 import { Timeline } from "../components/Timeline";
@@ -42,7 +42,7 @@ export default function Page() {
     <div>
       <h1 className="text-2xl">Historical Processing Times</h1>
       <h2 className="text-xl text-gray-500 dark:text-gray-400">
-        For {getTitleForCategoryCode(visaType).substring(3)} Visas submitted in{" "}
+        For {getInfoForVisaType(visaType).title} Visas submitted in{" "}
         {countryCode}
       </h2>
 

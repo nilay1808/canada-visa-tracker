@@ -1,4 +1,4 @@
-export const viasCategoryCodes = [
+export const visaTypes = [
   "child_adopted",
   "child_dependent",
   "refugees_gov",
@@ -9,43 +9,21 @@ export const viasCategoryCodes = [
   "work",
 ] as const;
 
-export type VisaCategoryCode = (typeof viasCategoryCodes)[number];
+export type VisaType = (typeof visaTypes)[number];
 
 export function assertValidVisaCategoryCode(
   categoryCode: any
-): asserts categoryCode is VisaCategoryCode {
+): asserts categoryCode is VisaType {
   if (typeof categoryCode !== "string") {
     throw new Error("categoryCode is not a string");
   }
 
-  if (!viasCategoryCodes.includes(categoryCode as VisaCategoryCode)) {
+  if (!visaTypes.includes(categoryCode as VisaType)) {
     throw new Error(`Invalid categoryCode=${categoryCode}`);
   }
 }
 
-export function getTitleForCategoryCode(categoryCode: VisaCategoryCode) {
-  assertValidVisaCategoryCode(categoryCode);
-  switch (categoryCode) {
-    case "visitor-outside-canada":
-      return "🧳 Visitor/Tourist";
-    case "supervisa":
-      return "🧑‍🦳 Super";
-    case "study":
-      return "📕 Study";
-    case "work":
-      return "🖥️ Work";
-    case "child_dependent":
-      return "🧒 Child Dependent";
-    case "child_adopted":
-      return "🧒 Child Adopted";
-    case "refugees_gov":
-      return "🆘 Refugees";
-    case "refugees_private":
-      return "🆘 Refugees (private)";
-  }
-}
-
-export function getInfoForVisaType(visaType: VisaCategoryCode) {
+export function getInfoForVisaType(visaType: VisaType) {
   assertValidVisaCategoryCode(visaType);
   switch (visaType) {
     case "visitor-outside-canada":

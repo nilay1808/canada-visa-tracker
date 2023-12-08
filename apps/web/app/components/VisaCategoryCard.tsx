@@ -1,12 +1,9 @@
 import { Link } from "@remix-run/react";
-import {
-  getInfoForVisaType,
-  type VisaCategoryCode,
-} from "~/lib/VisaCategoryCodes";
+import { getInfoForVisaType, type VisaType } from "~/lib/VisaCategoryCodes";
 import { Card } from "./ui/card";
 
 interface CategoryCardProps {
-  categoryCode: VisaCategoryCode;
+  categoryCode: VisaType;
 }
 
 export function CategoryCard({ categoryCode }: CategoryCardProps) {
@@ -15,7 +12,7 @@ export function CategoryCard({ categoryCode }: CategoryCardProps) {
   return (
     <Link to={`/visa/${categoryCode}`}>
       <Card className="p-6 h-full flex flex-col justify-start gap-3 hover:bg-gray-100 hover:dark:border-gray-600 hover:dark:bg-gray-900">
-        <h3 className="text-lg font-semibold">
+        <h3 className="text-lg font-medium">
           {icon}
           &nbsp;&nbsp;
           {title}

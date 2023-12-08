@@ -31,7 +31,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function App() {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
 
   return (
     <html lang="en">

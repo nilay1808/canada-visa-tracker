@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import { viasCategoryCodes } from "~/lib/VisaCategoryCodes";
+import { visaTypes } from "~/lib/VisaCategoryCodes";
 import { CategoryCard } from "../components/VisaCategoryCard";
 import { Link } from "@remix-run/react";
 
@@ -18,7 +18,7 @@ export default function Index() {
   return (
     <div>
       <div className="mb-12">
-        <h1 className="text-2xl mb-1">
+        <h1 className="text-2xl font-medium mb-1">
           Check Processing Times for all Canada Visas
         </h1>
         <p className="text-gray-700 dark:text-gray-400">
@@ -34,12 +34,14 @@ export default function Index() {
         </p>
       </div>
 
-      <h2 className="text-2xl mb-4">Visa Categories</h2>
+      <h2 className="text-2xl mb-4 font-medium">Visa Categories</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
-        {viasCategoryCodes.map((categoryCode) => (
-          <CategoryCard key={categoryCode} categoryCode={categoryCode} />
-        ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {visaTypes
+          .map((categoryCode) => (
+            <CategoryCard key={categoryCode} categoryCode={categoryCode} />
+          ))
+          .reverse()}
       </div>
     </div>
   );
