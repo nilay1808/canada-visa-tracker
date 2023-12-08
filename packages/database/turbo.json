@@ -32,11 +32,6 @@
       ],
       "persistent": true
     },
-    "db:up": {},
-    "start": {
-      "dependsOn": [
-        "db:migrate"
-      ]
-    }
+    "db:up": {}
   }
 }

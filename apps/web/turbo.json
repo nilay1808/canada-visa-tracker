@@ -8,6 +8,11 @@
         "build/**",
         "public/build/**"
       ]
+    },
+    "start": {
+      "dependsOn": [
+        "database#db:migrate"
+      ]
     }
   }
 }
