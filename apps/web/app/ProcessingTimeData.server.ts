@@ -6,15 +6,15 @@ export async function getProcessingTimesDataForVisaType(visaType: string) {
     await processingTimeService.getLatestProcessingTimesForVisaType(visaType);
   return {
     publishedAt: prettyDateString(new Date(publishedAt)),
-    processingTimes: processingTimes.map(
-      ({ countryCode, countryName, estimateTime }) => {
+    processingTimes: processingTimes
+      .map(({ countryCode, countryName, estimateTime }) => {
         return {
           countryName: countryName ?? countryCode,
           estimateTime,
           historicalViewLink: `/${visaType}/${countryCode}`,
         };
-      }
-    ),
+      })
+      .sort((a, b) => a.countryName.localeCompare(b.countryName)),
   };
 }
 
