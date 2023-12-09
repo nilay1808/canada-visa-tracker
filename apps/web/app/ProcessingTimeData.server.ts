@@ -11,7 +11,7 @@ export async function getProcessingTimesDataForVisaType(visaType: string) {
         return {
           countryName: countryName ?? countryCode,
           estimateTime,
-          historicalViewLink: `/visa/${visaType}/${countryCode}`,
+          historicalViewLink: `/${visaType}/${countryCode}`,
         };
       }
     ),

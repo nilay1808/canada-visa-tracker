@@ -1,46 +1,67 @@
 import { ChevronRightIcon } from "@radix-ui/react-icons";
-import type { UIMatch } from "@remix-run/react";
-import { Link, useMatches } from "@remix-run/react";
-import { getInfoForVisaType } from "~/lib/VisaCategoryCodes";
+import { Link, useLocation } from "@remix-run/react";
+import type { VisaType } from "~/lib/VisaCategoryCodes";
+import { getInfoForVisaType, visaTypes } from "~/lib/VisaCategoryCodes";
+import { getCountryName } from "~/lib/countryCodeToCountry";
 
-function getBreadcrumbSegmentData(match: UIMatch) {
-  if (match.id === "root") {
-    return {
+function segmentToName(segment: string) {
+  if (visaTypes.includes(segment as VisaType)) {
+    return getInfoForVisaType(segment).title;
+  }
+
+  return getCountryName(segment);
+}
+
+function getBreadcrumbSegmentData(currentPath: string) {
+  const pathSegments = currentPath.split("/");
+
+  const breadcrumbsPath = [
+    {
       name: "Home",
       url: "/",
-    };
-  } else if (match.id === "routes/visa.$visaType") {
-    return {
-      name: getInfoForVisaType(match.params.visaType!).title,
-      url: `/visa/${match.params.visaType}`,
-    };
-  } else if (match.id === "routes/visa_.$visaType.$countryCode") {
-    return {
-      name: "Historical Processing Times",
-      url: `/visa/${match.params.visaType}/${match.params.countryCode}`,
-    };
-  }
-  throw new Error("Unknown match");
+    },
+  ];
+
+  pathSegments.forEach((segment, index) => {
+    if (segment === "") {
+      return;
+    }
+
+    const url = `${breadcrumbsPath[index - 1]?.url ?? ""}${segment}/`;
+
+    breadcrumbsPath.push({
+      name: segmentToName(segment),
+      url,
+    });
+  });
+
+  return breadcrumbsPath;
 }
 
 export function Breadcrumbs() {
-  const matches = useMatches();
+  const location = useLocation();
+
+  const paths = getBreadcrumbSegmentData(location.pathname);
+
   return (
     <nav aria-label="Breadcrumb" className="mb-4">
-      <ol className="flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-        {matches.map((match, index) => {
-          const { name, url } = getBreadcrumbSegmentData(match);
+      <ol className="flex flex-wrap items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+        {paths.map((path, index) => {
+          const { name, url } = path;
+
+          const isLast = index === paths.length - 1;
+
           return (
             <>
               <li>
                 <Link
-                  className="hover:text-gray-900 dark:hover:text-gray-50"
-                  to={url}
+                  className="hover:text-gray-950 dark:hover:text-gray-50"
+                  to={isLast ? "#" : url}
                 >
                   {name}
                 </Link>
               </li>
-              {index < matches.length - 1 && (
+              {!isLast && (
                 <li>
                   <ChevronRightIcon className="w-4 h-4" />
                 </li>

@@ -16,7 +16,7 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div>
+    <div className="sm:mt-8">
       <div className="mb-12">
         <h1 className="text-2xl font-medium mb-1">
           Check Processing Times for all Canada Visas
@@ -37,11 +37,9 @@ export default function Index() {
       <h2 className="text-2xl mb-4 font-medium">Visa Categories</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {visaTypes
-          .map((categoryCode) => (
-            <CategoryCard key={categoryCode} categoryCode={categoryCode} />
-          ))
-          .reverse()}
+        {visaTypes.map((categoryCode) => (
+          <CategoryCard key={categoryCode} categoryCode={categoryCode} />
+        ))}
       </div>
     </div>
   );

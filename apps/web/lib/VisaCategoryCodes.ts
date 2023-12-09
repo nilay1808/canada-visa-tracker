@@ -1,12 +1,12 @@
 export const visaTypes = [
+  "visitor-outside-canada",
+  "study",
+  "work",
+  "supervisa",
   "child_adopted",
   "child_dependent",
   "refugees_gov",
   "refugees_private",
-  "study",
-  "supervisa",
-  "visitor-outside-canada",
-  "work",
 ] as const;
 
 export type VisaType = (typeof visaTypes)[number];

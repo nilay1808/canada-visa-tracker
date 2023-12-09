@@ -9,7 +9,6 @@ import { Suspense } from "react";
 import { Skeleton } from "../components/ui/skeleton";
 import { defer } from "@remix-run/node";
 import { getProcessingTimesDataForVisaType } from "../ProcessingTimeData.server";
-import { Breadcrumbs } from "../components/Breadcrumbs";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const visaType = params.visaType;
@@ -26,7 +25,7 @@ export default function VisaProcessingTimes() {
 
   return (
     <>
-      <Breadcrumbs />
+      {/* <Breadcrumbs /> */}
       <Suspense fallback={<Skeleton className="h-[700px] w-full" />}>
         <Await resolve={processingTimeData}>
           {({ publishedAt, processingTimes }) => (
