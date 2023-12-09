@@ -1,4 +1,4 @@
-# Canada Visa Tracker
+# 🇨🇦 Canada Visa Tracker
 
 ## Introduction
 
@@ -11,3 +11,10 @@ This is a simple web application to track the processing times for different Can
 - Both of these services share the same Postgres database and use [Drizzle ORM](https://orm.drizzle.team/) to interact with it.
 - The entire repository which is a monorepo is powered by Turborepo and PNPM workspaces.
 - Lastly, all the services are hosted on [Railway](https://railway.app/).
+
+## Development
+
+Getting started should be easy, you will need Node.js 18+, PNPM, and Docker installed.
+
+1. Install dependencies using `pnpm i`
+2. Start the database using `pnpm dev` should start the database, run migrations, and start all the services.
