@@ -98,7 +98,8 @@ export class ProcessingTimeService {
           eq(processingTimesTable.visaType, visaType),
           eq(processingTimesTable.publishedAt, publishedAt)
         )
-      );
+      )
+      .orderBy(processingTimesTable.countryName);
 
     return {
       publishedAt: publishedAt.toLocaleDateString(),
