@@ -18,4 +18,9 @@ export default {
       perf_hooks: true,
     },
   },
+  watchPaths: [
+    "./tailwind.config.js",
+    "./lib/**/*.{ts,tsx}",
+    "../../packages/**/*.{ts,tsx}",
+  ],
 };

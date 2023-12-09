@@ -5,9 +5,10 @@ import {
   assertValidVisaCategoryCode,
   getInfoForVisaType,
 } from "~/lib/VisaCategoryCodes";
-import { getHistoricalProcessingTimes } from "../ProcessingTimeData.server";
+import { processingTimeService } from "../ProcessingTimeData.server";
 import { Timeline } from "../components/Timeline";
 import { getCountryName } from "~/lib/countryCodeToCountry";
+import { prettyDateString } from "~/lib/utils";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { visaType, countryCode } = params;
@@ -17,10 +18,11 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Error("Country code is required");
   }
 
-  const historicalData = await getHistoricalProcessingTimes(
-    visaType,
-    countryCode
-  );
+  const historicalData =
+    await processingTimeService.getHistoricalProcessingTimes(
+      visaType,
+      countryCode
+    );
 
   return {
     visaType,
@@ -34,20 +36,16 @@ export default function Page() {
     useLoaderData<typeof loader>();
 
   const timelineData = historicalData.map((item) => ({
-    updatedAt: item.publishedAt,
+    updatedAt: prettyDateString(item.publishedAt),
     title: item.estimateTime,
     description: item.countryName ?? item.countryCode,
   }));
 
   return (
     <div>
-      <h1 className="text-xl mb-8 text-gray-900 dark:text-gray-200">
-        Historical Processing Times for{" "}
-        <span className="font-semibold">
-          {getInfoForVisaType(visaType).title} Visas{" "}
-        </span>
-        submitted in{" "}
-        <span className="font-semibold">{getCountryName(countryCode)}</span>
+      <h1 className="text-2xl mb-8 text-gray-900 dark:text-gray-200">
+        {getInfoForVisaType(visaType).title} Visa Processing Times for{" "}
+        {getCountryName(countryCode)}
       </h1>
 
       <div className="flex justify-center">

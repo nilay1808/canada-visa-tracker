@@ -1,7 +1,6 @@
 import { eq, and, desc, max, asc } from "drizzle-orm";
 
 import { db, processingTimesTable } from "database";
-import { sql } from "drizzle-orm";
 
 export interface RawProcessingTimeData {
   child_adopted: Record<string, string>;
@@ -76,8 +75,7 @@ export class ProcessingTimeService {
       .returning();
   }
 
-  async getLatestStatsForVisaType(visaType: string) {
-    // Latest published at for the visa type
+  async getLatestPublishedAt(visaType: string) {
     const [{ publishedAt }] = await db
       .select({
         publishedAt: processingTimesTable.publishedAt,
@@ -87,7 +85,11 @@ export class ProcessingTimeService {
       .orderBy(desc(processingTimesTable.publishedAt))
       .limit(1);
 
-    const baseQuery = db
+    return publishedAt;
+  }
+
+  async getStatistics(visaType: string, publishedAt: Date) {
+    const results = await db
       .select({
         countryCode: processingTimesTable.countryCode,
         countryName: processingTimesTable.countryName,
@@ -99,48 +101,23 @@ export class ProcessingTimeService {
           eq(processingTimesTable.visaType, visaType),
           eq(processingTimesTable.publishedAt, publishedAt)
         )
-      );
-
-    const fastest = await baseQuery
-      .orderBy(asc(processingTimesTable.estimate))
-      .limit(1);
-
-    const slowest = await baseQuery
-      .orderBy(desc(processingTimesTable.estimate))
-      .limit(1);
-
-    const average = await db
-      .select({
-        estimateTime: sql`avg(${processingTimesTable.estimate})`,
-      })
-      .from(processingTimesTable)
-      .where(
-        and(
-          eq(processingTimesTable.visaType, visaType),
-          eq(processingTimesTable.publishedAt, publishedAt)
-        )
       )
-      .limit(1);
+      .orderBy(asc(processingTimesTable.estimate));
+
+    const length = results.length;
+
+    const fastest = results[0];
+    const slowest = results[length - 1];
+    const median = results[Math.floor(length / 2)];
 
     return {
-      publishedAt: publishedAt.toLocaleDateString(),
-      fastest: fastest[0],
-      slowest: slowest[0],
-      average: average[0],
+      fastest,
+      slowest,
+      median,
     };
   }
 
-  async getLatestProcessingTimesForVisaType(visaType: string) {
-    // Latest published at for the visa type
-    const [{ publishedAt }] = await db
-      .select({
-        publishedAt: processingTimesTable.publishedAt,
-      })
-      .from(processingTimesTable)
-      .where(eq(processingTimesTable.visaType, visaType))
-      .orderBy(desc(processingTimesTable.publishedAt))
-      .limit(1);
-
+  async getProcessingTimes(visaType: string, publishedAt: Date) {
     const processingTimesData = await db
       .select({
         countryCode: processingTimesTable.countryCode,
@@ -156,17 +133,14 @@ export class ProcessingTimeService {
       )
       .orderBy(processingTimesTable.countryName);
 
-    return {
-      publishedAt: publishedAt.toLocaleDateString(),
-      processingTimes: processingTimesData.map(
-        ({ countryCode, countryName, estimateTime }) => ({
-          countryCode,
-          countryName: countryName ?? countryCode,
-          estimateTime,
-          visaType,
-        })
-      ),
-    };
+    return processingTimesData.map(
+      ({ countryCode, countryName, estimateTime }) => ({
+        countryName: countryName ?? countryCode,
+        estimateTime,
+        visaType,
+        historicalViewLink: `/${visaType}/${countryCode}`,
+      })
+    );
   }
 
   async getHistoricalProcessingTimes(visaType: string, countryCode: string) {
@@ -185,7 +159,8 @@ export class ProcessingTimeService {
           eq(processingTimesTable.countryCode, countryCode)
         )
       )
-      .orderBy(desc(processingTimesTable.publishedAt));
+      .orderBy(desc(processingTimesTable.publishedAt))
+      .limit(12);
 
     return data;
   }

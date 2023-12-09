@@ -27,7 +27,7 @@ interface StatisticCardProps {
 export const StatisticCard = ({ title, value, unit }: StatisticCardProps) => {
   return (
     <Card className="p-4 w-full flex flex-col items-center">
-      <div className="font-semibold text-gray-600 dark:text-gray-400">
+      <div className="font-semibold text-gray-500 dark:text-gray-400">
         {title}
       </div>
       <div className="text-xl font-bold">{value}</div>

@@ -7,33 +7,49 @@ import { ProcessingTimeTable } from "../components/ProcessingTimesTable";
 import { Await, useLoaderData } from "@remix-run/react";
 import { Suspense } from "react";
 import { Skeleton } from "../components/ui/skeleton";
-import { defer } from "@remix-run/node";
-import {
-  getLatestStatsForVisaType,
-  getProcessingTimesDataForVisaType,
-} from "../ProcessingTimeData.server";
+import { defer, redirect } from "@remix-run/node";
+import { processingTimeService } from "../ProcessingTimeData.server";
 import { Statistics } from "../components/Statistics";
+import { prettyDateString } from "~/lib/utils";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const visaType = params.visaType;
-  assertValidVisaCategoryCode(visaType);
+
+  try {
+    assertValidVisaCategoryCode(visaType);
+  } catch (error) {
+    return redirect("/");
+  }
+
+  const publishedAt = await processingTimeService.getLatestPublishedAt(
+    visaType
+  );
 
   return defer({
     visaType,
-    processingTimeData: getProcessingTimesDataForVisaType(visaType),
-    stats: getLatestStatsForVisaType(visaType),
+    publishedAt,
+    processingTimeData: processingTimeService.getProcessingTimes(
+      visaType,
+      publishedAt
+    ),
+    stats: processingTimeService.getStatistics(visaType, publishedAt),
   });
 }
 
 export default function VisaProcessingTimes() {
-  const { visaType, processingTimeData, stats } =
+  const { visaType, publishedAt, processingTimeData, stats } =
     useLoaderData<typeof loader>();
 
   return (
     <>
-      <h1 className="text-2xl font-semibold mb-4">
-        {getInfoForVisaType(visaType).title} Visa Details
-      </h1>
+      <div className="w-full inline-flex items-baseline justify-between">
+        <h1 className="text-2xl font-semibold mb-4">
+          {getInfoForVisaType(visaType).title} Visa Details
+        </h1>
+        <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          Updated on {prettyDateString(new Date(publishedAt))}
+        </h3>
+      </div>
 
       <Suspense fallback={<Skeleton className="h-[150px] w-full" />}>
         <Await resolve={stats}>
@@ -46,6 +62,11 @@ export default function VisaProcessingTimes() {
                     title: "Fastest",
                     value: stats.fastest.estimateTime,
                     unit: stats.fastest.countryName ?? "",
+                  },
+                  {
+                    title: "Median",
+                    value: stats.median.estimateTime,
+                    unit: stats.median.countryName ?? "",
                   },
                   {
                     title: "Slowest",
@@ -61,11 +82,10 @@ export default function VisaProcessingTimes() {
 
       <Suspense fallback={<Skeleton className="h-[700px] w-full" />}>
         <Await resolve={processingTimeData}>
-          {({ publishedAt, processingTimes }) => (
+          {(processingTimes) => (
             <div>
               <ProcessingTimeTable
                 title="Processing Times"
-                lastUpdated={publishedAt}
                 processingTimes={processingTimes}
               />
             </div>

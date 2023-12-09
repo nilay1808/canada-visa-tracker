@@ -28,7 +28,7 @@ const columns: ColumnDef<ProcessingTimeForCountry>[] = [
 
 interface ProcessingTimeTableProps {
   title: string;
-  lastUpdated: string;
+  lastUpdated?: string;
   processingTimes: ProcessingTimeForCountry[];
 }
 
@@ -41,7 +41,7 @@ export const ProcessingTimeTable = ({
     <div>
       <DataTable
         title={title}
-        footer={`Updated on ${lastUpdated}`}
+        footer={lastUpdated ? `Updated on ${lastUpdated}` : undefined}
         columns={columns}
         data={processingTimes}
         filterPlaceholder="Filter by country name (E.x United States)"
