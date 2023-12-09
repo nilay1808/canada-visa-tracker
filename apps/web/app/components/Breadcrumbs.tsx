@@ -45,28 +45,22 @@ export function Breadcrumbs() {
 
   return (
     <nav aria-label="Breadcrumb" className="mb-4">
-      <ol className="flex flex-wrap items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+      <ol className="flex items-center text-sm text-gray-500 dark:text-gray-400">
         {paths.map((path, index) => {
           const { name, url } = path;
 
           const isLast = index === paths.length - 1;
 
           return (
-            <>
-              <li>
-                <Link
-                  className="hover:text-gray-950 dark:hover:text-gray-50"
-                  to={isLast ? "#" : url}
-                >
-                  {name}
-                </Link>
-              </li>
-              {!isLast && (
-                <li>
-                  <ChevronRightIcon className="w-4 h-4" />
-                </li>
-              )}
-            </>
+            <li className="flex flex-wrap items-center" key={`link-${index}`}>
+              <Link
+                className="hover:text-gray-950 dark:hover:text-gray-50 mr-2"
+                to={isLast ? "#" : url}
+              >
+                {name}
+              </Link>
+              {!isLast && <ChevronRightIcon className="w-4 h-4 mr-2" />}
+            </li>
           );
         })}
       </ol>

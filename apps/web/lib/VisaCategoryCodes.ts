@@ -42,7 +42,7 @@ export function getInfoForVisaType(visaType: string) {
     case "study":
       return {
         icon: "📕",
-        title: "Study",
+        title: "Student",
         description:
           "For people who want to study at a Canadian university or college",
       };

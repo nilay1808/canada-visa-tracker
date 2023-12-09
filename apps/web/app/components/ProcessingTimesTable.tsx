@@ -11,7 +11,7 @@ interface ProcessingTimeForCountry {
 const columns: ColumnDef<ProcessingTimeForCountry>[] = [
   {
     accessorKey: "countryName",
-    header: () => <>🌎 &nbsp; Country</>,
+    header: () => <>Country</>,
   },
   {
     accessorKey: "estimateTime",

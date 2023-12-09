@@ -18,6 +18,11 @@ export async function getProcessingTimesDataForVisaType(visaType: string) {
   };
 }
 
+export async function getLatestStatsForVisaType(visaType: string) {
+  const processingTimeService = new ProcessingTimeService();
+  return await processingTimeService.getLatestStatsForVisaType(visaType);
+}
+
 export async function getHistoricalProcessingTimes(
   visaType: string,
   countryCode: string

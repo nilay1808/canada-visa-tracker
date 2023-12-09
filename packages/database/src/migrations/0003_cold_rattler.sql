@@ -1,0 +1,1 @@
+ALTER TABLE "processing_times" ALTER COLUMN "estimate" SET DATA TYPE interval day;

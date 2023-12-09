@@ -80,9 +80,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex flex-col sm:flex-row items-center justify-between pb-4">
-        <h2 className="text-xl text-center w-full sm:text-left my-2 font-medium">
-          {title}
-        </h2>
+        <h2 className="text-xl w-full text-left my-2 font-medium">{title}</h2>
         <div className="inline-flex w-full sm:items-center justify-end">
           <Input
             placeholder={filterPlaceholder}

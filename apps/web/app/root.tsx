@@ -13,6 +13,7 @@ import styles from "./globals.css";
 import { Navbar } from "./components/Navbar";
 import { useState } from "react";
 import { cn } from "~/lib/utils";
+import { Footer } from "./components/Footer";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -42,7 +43,7 @@ export default function App() {
         <Links />
       </head>
       <body
-        className={cn("mb-8", {
+        className={cn("flex flex-col min-h-screen", {
           dark: isDark,
         })}
       >
@@ -53,6 +54,7 @@ export default function App() {
         <div className="container">
           <Outlet />
         </div>
+        <Footer />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

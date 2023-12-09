@@ -20,7 +20,9 @@ export const processingTimesTable = pgTable(
     countryName: text("country_name"),
     visaType: text("visa_type").notNull(),
     estimateTime: text("estimate_time").notNull(),
-    estimate: interval("estimate"),
+    estimate: interval("estimate", {
+      fields: "day",
+    }),
   },
   (t) => ({
     unq: unique().on(t.countryCode, t.visaType, t.publishedAt),

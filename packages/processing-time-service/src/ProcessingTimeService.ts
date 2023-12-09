@@ -1,6 +1,7 @@
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, max, asc } from "drizzle-orm";
 
 import { db, processingTimesTable } from "database";
+import { sql } from "drizzle-orm";
 
 export interface RawProcessingTimeData {
   child_adopted: Record<string, string>;
@@ -73,6 +74,60 @@ export class ProcessingTimeService {
       .values(processingTimesArray)
       .onConflictDoNothing()
       .returning();
+  }
+
+  async getLatestStatsForVisaType(visaType: string) {
+    // Latest published at for the visa type
+    const [{ publishedAt }] = await db
+      .select({
+        publishedAt: processingTimesTable.publishedAt,
+      })
+      .from(processingTimesTable)
+      .where(eq(processingTimesTable.visaType, visaType))
+      .orderBy(desc(processingTimesTable.publishedAt))
+      .limit(1);
+
+    const baseQuery = db
+      .select({
+        countryCode: processingTimesTable.countryCode,
+        countryName: processingTimesTable.countryName,
+        estimateTime: processingTimesTable.estimateTime,
+      })
+      .from(processingTimesTable)
+      .where(
+        and(
+          eq(processingTimesTable.visaType, visaType),
+          eq(processingTimesTable.publishedAt, publishedAt)
+        )
+      );
+
+    const fastest = await baseQuery
+      .orderBy(asc(processingTimesTable.estimate))
+      .limit(1);
+
+    const slowest = await baseQuery
+      .orderBy(desc(processingTimesTable.estimate))
+      .limit(1);
+
+    const average = await db
+      .select({
+        estimateTime: sql`avg(${processingTimesTable.estimate})`,
+      })
+      .from(processingTimesTable)
+      .where(
+        and(
+          eq(processingTimesTable.visaType, visaType),
+          eq(processingTimesTable.publishedAt, publishedAt)
+        )
+      )
+      .limit(1);
+
+    return {
+      publishedAt: publishedAt.toLocaleDateString(),
+      fastest: fastest[0],
+      slowest: slowest[0],
+      average: average[0],
+    };
   }
 
   async getLatestProcessingTimesForVisaType(visaType: string) {
