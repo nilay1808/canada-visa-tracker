@@ -10,7 +10,7 @@ interface TimelineProps {
 
 export function Timeline({ timeline }: TimelineProps) {
   return (
-    <ol className="relative border-s border-gray-300 dark:border-gray-700">
+    <ol className="m-4 relative border-s border-gray-400 dark:border-gray-600">
       {timeline.map((item, i) => (
         <TimelineItem
           key={item.updatedAt}
@@ -31,14 +31,12 @@ function TimelineItem({
 }) {
   return (
     <li className={isLast ? "ms-4" : "mb-10 ms-4"}>
-      <div className="absolute w-3 h-3 bg-gray-300 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700" />
-      <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
+      <div className="absolute w-3 h-3 bg-gray-400 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700" />
+      <time className="mb-1 text-sm font-normal leading-none text-gray-500">
         {item.updatedAt}
       </time>
       <h3 className="text-lg font-semibold">{item.title}</h3>
-      <p className="font-normal text-gray-500 dark:text-gray-400">
-        {item.description}
-      </p>
+      <p className="font-normal text-gray-500">{item.description}</p>
     </li>
   );
 }

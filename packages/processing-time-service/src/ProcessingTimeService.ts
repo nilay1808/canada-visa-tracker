@@ -1,4 +1,4 @@
-import { eq, and, desc, max, asc } from "drizzle-orm";
+import { eq, and, desc, asc } from "drizzle-orm";
 
 import { db, processingTimesTable } from "database";
 
@@ -88,21 +88,31 @@ export class ProcessingTimeService {
     return publishedAt;
   }
 
-  async getStatistics(visaType: string, publishedAt: Date) {
+  async getStatistics(visaType: string) {
+    const latestProcessingTime = db
+      .select({
+        publishedAt: processingTimesTable.publishedAt,
+      })
+      .from(processingTimesTable)
+      .where(eq(processingTimesTable.visaType, visaType))
+      .orderBy(desc(processingTimesTable.publishedAt))
+      .limit(1)
+      .as("latestProcessingTime");
+
     const results = await db
       .select({
         countryCode: processingTimesTable.countryCode,
         countryName: processingTimesTable.countryName,
         estimateTime: processingTimesTable.estimateTime,
+        publishedAt: processingTimesTable.publishedAt,
       })
       .from(processingTimesTable)
-      .where(
-        and(
-          eq(processingTimesTable.visaType, visaType),
-          eq(processingTimesTable.publishedAt, publishedAt)
-        )
+      .where(eq(processingTimesTable.visaType, visaType))
+      .rightJoin(
+        latestProcessingTime,
+        eq(processingTimesTable.publishedAt, latestProcessingTime.publishedAt)
       )
-      .orderBy(asc(processingTimesTable.estimate));
+      .orderBy(processingTimesTable.estimate);
 
     const length = results.length;
 
@@ -117,7 +127,23 @@ export class ProcessingTimeService {
     };
   }
 
-  async getProcessingTimes(visaType: string, publishedAt: Date) {
+  async getProcessingTimes(visaType: string): Promise<
+    {
+      estimateTime: string;
+      countryName: string;
+      historicalViewLink: string;
+    }[]
+  > {
+    const latestProcessingTime = db
+      .select({
+        publishedAt: processingTimesTable.publishedAt,
+      })
+      .from(processingTimesTable)
+      .where(eq(processingTimesTable.visaType, visaType))
+      .orderBy(desc(processingTimesTable.publishedAt))
+      .limit(1)
+      .as("latestProcessingTime");
+
     const processingTimesData = await db
       .select({
         countryCode: processingTimesTable.countryCode,
@@ -125,22 +151,28 @@ export class ProcessingTimeService {
         estimateTime: processingTimesTable.estimateTime,
       })
       .from(processingTimesTable)
-      .where(
-        and(
-          eq(processingTimesTable.visaType, visaType),
-          eq(processingTimesTable.publishedAt, publishedAt)
-        )
+      .where(eq(processingTimesTable.visaType, visaType))
+      .rightJoin(
+        latestProcessingTime,
+        eq(processingTimesTable.publishedAt, latestProcessingTime.publishedAt)
       )
       .orderBy(processingTimesTable.countryName);
 
-    return processingTimesData.map(
-      ({ countryCode, countryName, estimateTime }) => ({
-        countryName: countryName ?? countryCode,
-        estimateTime,
-        visaType,
-        historicalViewLink: `/${visaType}/${countryCode}`,
+    return processingTimesData
+      .map((data) => {
+        const { countryCode, countryName, estimateTime } = data;
+
+        if (countryCode == null || estimateTime == null) {
+          return;
+        }
+
+        return {
+          countryName: countryName ?? countryCode,
+          estimateTime,
+          historicalViewLink: `/${visaType}/${countryCode}`,
+        };
       })
-    );
+      .filter(isNotNull);
   }
 
   async getHistoricalProcessingTimes(visaType: string, countryCode: string) {

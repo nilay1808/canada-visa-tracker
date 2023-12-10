@@ -11,11 +11,11 @@ interface ProcessingTimeForCountry {
 const columns: ColumnDef<ProcessingTimeForCountry>[] = [
   {
     accessorKey: "countryName",
-    header: () => <>Country</>,
+    header: "Country",
   },
   {
     accessorKey: "estimateTime",
-    header: "Latest Processing time",
+    header: "Processing Time",
   },
   {
     header: "Historical Data",
