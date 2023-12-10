@@ -1,5 +1,5 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import { json, type LinksFunction, type MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -7,12 +7,15 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
+  useLocation,
 } from "@remix-run/react";
 
 import styles from "./globals.css";
 import { Navbar } from "./components/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "~/lib/utils";
+import { pageview } from "~/lib/gtags.client";
 import { Footer } from "./components/Footer";
 
 export const links: LinksFunction = () => [
@@ -31,8 +34,22 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+// Load the GA tracking id from the .env
+export const loader = async () => {
+  return json({ gaTrackingId: process.env.GA_TRACKING_ID });
+};
+
 export default function App() {
   const [isDark, setIsDark] = useState(false);
+
+  const location = useLocation();
+  const { gaTrackingId } = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    if (gaTrackingId?.length) {
+      pageview(location.pathname, gaTrackingId);
+    }
+  }, [location, gaTrackingId]);
 
   return (
     <html lang="en">
@@ -47,6 +64,30 @@ export default function App() {
           dark: isDark,
         })}
       >
+        {process.env.NODE_ENV === "development" || !gaTrackingId ? null : (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaTrackingId}`}
+            />
+            <script
+              async
+              id="gtag-init"
+              dangerouslySetInnerHTML={{
+                __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '${gaTrackingId}', {
+                  page_path: window.location.pathname,
+                });
+              `,
+              }}
+            />
+          </>
+        )}
+
         <Navbar
           checked={isDark}
           onCheckedChange={() => setIsDark((prev) => !prev)}
