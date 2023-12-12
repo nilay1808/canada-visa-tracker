@@ -1,4 +1,4 @@
-import { eq, and, desc, asc } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 
 import { db, processingTimesTable } from "database";
 
@@ -8,10 +8,11 @@ export interface RawProcessingTimeData {
   refugees_gov: Record<string, string>;
   refugees_private: Record<
     string,
-    {
-      sponsor: string;
-      refugee: string;
-    }
+    | {
+        sponsor: string;
+        refugee: string;
+      }
+    | string
   >;
   study: Record<string, string>;
   supervisa: Record<string, string>;
