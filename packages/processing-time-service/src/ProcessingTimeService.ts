@@ -77,7 +77,7 @@ export class ProcessingTimeService {
   }
 
   async getLatestPublishedAt(visaType: string) {
-    const [{ publishedAt }] = await db
+    const [result] = await db
       .select({
         publishedAt: processingTimesTable.publishedAt,
       })
@@ -86,7 +86,7 @@ export class ProcessingTimeService {
       .orderBy(desc(processingTimesTable.publishedAt))
       .limit(1);
 
-    return publishedAt;
+    return result?.publishedAt;
   }
 
   async getStatistics(visaType: string) {

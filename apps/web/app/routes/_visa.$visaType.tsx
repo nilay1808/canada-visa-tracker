@@ -32,18 +32,18 @@ export default function VisaProcessingTimes() {
                 statistics={[
                   {
                     title: "Fastest",
-                    value: stats.fastest.estimateTime ?? "",
-                    unit: stats.fastest.countryName ?? "",
+                    value: stats?.fastest?.estimateTime ?? "N/A",
+                    unit: stats?.fastest?.countryName ?? "",
                   },
                   {
                     title: "Median",
-                    value: stats.median.estimateTime ?? "",
-                    unit: stats.median.countryName ?? "",
+                    value: stats?.median?.estimateTime ?? "N/A",
+                    unit: stats?.median?.countryName ?? "",
                   },
                   {
                     title: "Slowest",
-                    value: stats.slowest.estimateTime ?? "",
-                    unit: stats.slowest.countryName ?? "",
+                    value: stats.slowest?.estimateTime ?? "N/A",
+                    unit: stats.slowest?.countryName ?? "",
                   },
                 ]}
               />
