@@ -215,8 +215,9 @@ const countryCodeToCountry = {
 type CountryCode = keyof typeof countryCodeToCountry;
 
 export function getCountryName(countryCode: string): string {
-  assertCountryCode(countryCode);
-  return countryCodeToCountry[countryCode];
+  const code = countryCode.toUpperCase();
+  assertCountryCode(code);
+  return countryCodeToCountry[code];
 }
 
 function assertCountryCode(

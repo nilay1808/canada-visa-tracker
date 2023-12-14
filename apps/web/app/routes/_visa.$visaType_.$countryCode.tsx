@@ -1,4 +1,4 @@
-import { defer, type LoaderFunctionArgs } from "@remix-run/node";
+import { defer, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { Await, useLoaderData } from "@remix-run/react";
 
 import {
@@ -18,6 +18,10 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   if (!countryCode) {
     throw new Error("Country code is required");
+  }
+
+  if (countryCode !== countryCode.toUpperCase()) {
+    return redirect(`/${visaType}/${countryCode.toUpperCase()}`);
   }
 
   return defer({

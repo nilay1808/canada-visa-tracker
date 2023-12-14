@@ -1,6 +1,6 @@
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { Breadcrumbs } from "../components/Breadcrumbs";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { redirect, defer } from "@remix-run/node";
 import {
   assertValidVisaCategoryCode,
@@ -8,6 +8,25 @@ import {
 } from "~/lib/VisaCategoryCodes";
 import { processingTimeService } from "../ProcessingTimeData.server";
 import { prettyDateString } from "~/lib/utils";
+import { getCountryName } from "~/lib/countryCodeToCountry";
+
+export const meta: MetaFunction = ({ params }) => {
+  const { visaType, countryCode } = params;
+
+  let title = "Canada Visa Tracker";
+
+  if (visaType) {
+    title = `${title} | ${getInfoForVisaType(visaType).title}`;
+  }
+
+  const country = countryCode ? getCountryName(countryCode) : "";
+
+  if (country) {
+    title = `${title} - ${country}`;
+  }
+
+  return [{ title }];
+};
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const visaType = params.visaType;
