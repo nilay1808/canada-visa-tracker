@@ -34,6 +34,8 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   filterPlaceholder: string;
   filterColumnAccessorKey: string;
+  onSearchUpdate?: (event: ChangeEvent<HTMLInputElement>) => void;
+  initialSearchValue?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -43,9 +45,21 @@ export function DataTable<TData, TValue>({
   data,
   filterPlaceholder,
   filterColumnAccessorKey,
+  onSearchUpdate,
+  initialSearchValue,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() => {
+    if (initialSearchValue) {
+      return [
+        {
+          id: filterColumnAccessorKey,
+          value: initialSearchValue,
+        },
+      ];
+    }
+    return [];
+  });
 
   const table = useReactTable({
     data,
@@ -68,6 +82,7 @@ export function DataTable<TData, TValue>({
   });
 
   const onFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onSearchUpdate?.(event);
     return table
       .getColumn(filterColumnAccessorKey)
       ?.setFilterValue(event.target.value);
