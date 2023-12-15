@@ -13,10 +13,14 @@ import {
 
 import styles from "./globals.css";
 import { Navbar } from "./components/Navbar";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { cn } from "~/lib/utils";
 import { pageview } from "~/lib/gtags.client";
 import { Footer } from "./components/Footer";
+import {
+  getDarkModeValueFromLocalStorage,
+  setDarkModeValueInLocalStorage,
+} from "./components/DarkMode.client";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -41,6 +45,15 @@ export const loader = async () => {
 
 export default function App() {
   const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    setIsDark(getDarkModeValueFromLocalStorage());
+  }, []);
+
+  const onCheckedChange = useCallback(() => {
+    setDarkModeValueInLocalStorage(!isDark);
+    setIsDark((prev) => !prev);
+  }, [isDark]);
 
   const location = useLocation();
   const { gaTrackingId } = useLoaderData<typeof loader>();
@@ -88,10 +101,7 @@ export default function App() {
           </>
         )}
 
-        <Navbar
-          checked={isDark}
-          onCheckedChange={() => setIsDark((prev) => !prev)}
-        />
+        <Navbar checked={isDark} onCheckedChange={onCheckedChange} />
         <div className="container">
           <Outlet />
         </div>

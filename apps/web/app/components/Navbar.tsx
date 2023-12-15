@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react";
 import { Switch } from "./ui/switch";
 
 interface Props {
-  checked?: boolean;
+  checked: boolean;
   onCheckedChange: () => void;
 }
 
