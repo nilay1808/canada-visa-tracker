@@ -72,6 +72,7 @@ export default function App() {
     if (posthotToken?.length) {
       posthog.init(posthotToken, {
         api_host: "https://app.posthog.com",
+        capture_pageview: false,
       });
     }
   }, [posthotToken]);
