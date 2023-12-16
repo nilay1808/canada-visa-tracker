@@ -69,7 +69,7 @@ export default function App() {
   }, [location, gaTrackingId]);
 
   useEffect(() => {
-    if (posthotToken?.length) {
+    if (posthotToken) {
       posthog.init(posthotToken, {
         api_host: "https://app.posthog.com",
         capture_pageview: false,
@@ -78,10 +78,11 @@ export default function App() {
   }, [posthotToken]);
 
   useEffect(() => {
-    if (posthotToken?.length) {
+    if (posthotToken) {
+      console.log("pageview", location.pathname);
       posthog.capture("$pageview");
     }
-  }, [location, posthotToken?.length]);
+  }, [location, posthotToken]);
 
   return (
     <html lang="en">
