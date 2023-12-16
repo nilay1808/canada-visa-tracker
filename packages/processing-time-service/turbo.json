@@ -3,10 +3,35 @@
     "//"
   ],
   "pipeline": {
+    "db:generate": {
+      "dependsOn": [
+        "^build"
+      ],
+      "cache": false
+    },
+    "db:migrate": {
+      "dependsOn": [
+        "db:generate",
+        "build"
+      ]
+    },
     "build": {
+      "dependsOn": [
+        "db:generate",
+        "^build"
+      ],
       "outputs": [
         "dist/**"
       ]
-    }
+    },
+    "dev": {
+      "dependsOn": [
+        "build",
+        "db:up",
+        "db:migrate"
+      ],
+      "persistent": true
+    },
+    "db:up": {}
   }
 }

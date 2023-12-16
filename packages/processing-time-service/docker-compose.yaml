@@ -1,9 +1,10 @@
 version: "3.7"
+name: database
 services:
   postgres:
     image: postgres:latest
     restart: always
-    container_name: canada-visa-tracker-pg
+    container_name: postgres
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

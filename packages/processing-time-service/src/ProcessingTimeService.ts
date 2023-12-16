@@ -1,6 +1,6 @@
 import { eq, and, desc } from "drizzle-orm";
-
-import { db, processingTimesTable } from "database";
+import { processingTimesTable } from "./schema";
+import { db } from "./database";
 
 export interface RawProcessingTimeData {
   child_adopted: Record<string, string>;

@@ -10,15 +10,20 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate:pg",
+    "db:up": "docker-compose up -d",
+    "db:down": "docker-compose down",
+    "db:migrate": "node dist/migrate.js"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.20.6",
     "tsconfig": "workspace:*",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "database": "workspace:*",
-    "drizzle-orm": "^0.29.1"
+    "drizzle-orm": "^0.29.1",
+    "postgres": "^3.4.3"
   }
 }
