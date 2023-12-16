@@ -11,7 +11,7 @@
     },
     "start": {
       "dependsOn": [
-        "database#db:migrate"
+        "processing-time-service#db:migrate"
       ]
     }
   }
