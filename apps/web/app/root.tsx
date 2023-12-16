@@ -79,7 +79,6 @@ export default function App() {
 
   useEffect(() => {
     if (posthotToken) {
-      console.log("pageview", location.pathname);
       posthog.capture("$pageview");
     }
   }, [location, posthotToken]);
