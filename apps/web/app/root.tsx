@@ -21,6 +21,7 @@ import {
   getDarkModeValueFromLocalStorage,
   setDarkModeValueInLocalStorage,
 } from "./components/DarkMode.client";
+import posthog from "posthog-js";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -40,7 +41,10 @@ export const meta: MetaFunction = () => {
 
 // Load the GA tracking id from the .env
 export const loader = async () => {
-  return json({ gaTrackingId: process.env.GA_TRACKING_ID });
+  return json({
+    gaTrackingId: process.env.GA_TRACKING_ID,
+    posthotToken: process.env.POSTHOG_TOKEN,
+  });
 };
 
 export default function App() {
@@ -56,13 +60,27 @@ export default function App() {
   }, [isDark]);
 
   const location = useLocation();
-  const { gaTrackingId } = useLoaderData<typeof loader>();
+  const { gaTrackingId, posthotToken } = useLoaderData<typeof loader>();
 
   useEffect(() => {
     if (gaTrackingId?.length) {
       pageview(location.pathname, gaTrackingId);
     }
   }, [location, gaTrackingId]);
+
+  useEffect(() => {
+    if (posthotToken?.length) {
+      posthog.init(posthotToken, {
+        api_host: "https://app.posthog.com",
+      });
+    }
+  }, [posthotToken]);
+
+  useEffect(() => {
+    if (!posthotToken?.length) {
+      posthog.capture("$pageview");
+    }
+  }, [location, posthotToken?.length]);
 
   return (
     <html lang="en">
