@@ -9,7 +9,7 @@ export const Statistics = ({ title, statistics }: StatisticsProps) => {
   return (
     <div className="mb-8">
       <h1 className="text-xl font-medium my-2">{title}</h1>
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="grid grid-cols-3 gap-2 sm:gap-6">
         {statistics.map((statistic, index) => (
           <StatisticCard {...statistic} key={`statistic-${index}`} />
         ))}
@@ -27,11 +27,11 @@ interface StatisticCardProps {
 export const StatisticCard = ({ title, value, unit }: StatisticCardProps) => {
   return (
     <Card className="p-4 w-full flex flex-col items-center">
-      <div className="font-semibold text-gray-500 dark:text-gray-400">
+      <div className="text-sm sm:text-md font-semibold text-gray-500 dark:text-gray-400">
         {title}
       </div>
-      <div className="text-xl font-bold">{value}</div>
-      <div className="text-sm font-semibold">{unit}</div>
+      <div className="text-xl font-bold text-center py-1">{value}</div>
+      <div className="text-sm font-medium">{unit}</div>
     </Card>
   );
 };
