@@ -13,13 +13,15 @@ export async function loader({ params }: LoaderFunctionArgs) {
   assertValidVisaCategoryCode(visaType);
 
   return defer({
+    visaType,
     processingTimeData: processingTimeService.getProcessingTimes(visaType),
     statsData: processingTimeService.getStatistics(visaType),
   });
 }
 
 export default function VisaProcessingTimes() {
-  const { processingTimeData, statsData } = useLoaderData<typeof loader>();
+  const { visaType, processingTimeData, statsData } =
+    useLoaderData<typeof loader>();
 
   return (
     <>
@@ -34,16 +36,19 @@ export default function VisaProcessingTimes() {
                     title: "Fastest",
                     value: stats?.fastest?.estimateTime ?? "N/A",
                     unit: stats?.fastest?.countryName ?? "",
+                    link: `/${visaType}/${stats?.fastest?.countryCode}`,
                   },
                   {
                     title: "Median",
                     value: stats?.median?.estimateTime ?? "N/A",
                     unit: stats?.median?.countryName ?? "",
+                    link: `/${visaType}/${stats?.median?.countryCode}`,
                   },
                   {
                     title: "Slowest",
                     value: stats.slowest?.estimateTime ?? "N/A",
                     unit: stats.slowest?.countryName ?? "",
+                    link: `/${visaType}/${stats.slowest?.countryCode}`,
                   },
                 ]}
               />

@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { Card } from "./ui/card";
 
 interface StatisticsProps {
@@ -22,16 +23,24 @@ interface StatisticCardProps {
   title: string;
   value: string;
   unit: string;
+  link: string;
 }
 
-export const StatisticCard = ({ title, value, unit }: StatisticCardProps) => {
+export const StatisticCard = ({
+  title,
+  value,
+  unit,
+  link,
+}: StatisticCardProps) => {
   return (
-    <Card className="p-4 w-full flex flex-col items-center">
-      <div className="text-sm sm:text-md font-semibold text-gray-500 dark:text-gray-400">
-        {title}
-      </div>
-      <div className="text-xl font-bold text-center py-1">{value}</div>
-      <div className="text-sm font-medium">{unit}</div>
-    </Card>
+    <Link to={link}>
+      <Card className="p-4 w-full flex flex-col items-center">
+        <div className="text-sm sm:text-md font-semibold text-gray-500 dark:text-gray-400">
+          {title}
+        </div>
+        <div className="text-xl font-bold text-center py-1">{value}</div>
+        <div className="text-sm font-medium">{unit}</div>
+      </Card>
+    </Link>
   );
 };
