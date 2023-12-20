@@ -11,6 +11,7 @@ import { getCountryName } from "~/lib/countryCodeToCountry";
 import { prettyDateString } from "~/lib/utils";
 import { Suspense } from "react";
 import { Skeleton } from "../components/ui/skeleton";
+import { AreaChart } from "@tremor/react";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { visaType, countryCode } = params;
@@ -43,8 +44,35 @@ export default function Page() {
         Historical Data for {getCountryName(countryCode)}
       </h2>
 
+      <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
+        <Await resolve={historicalData}>
+          {(timelineData) => {
+            const data = [...timelineData]
+              .sort((a, b) => a.publishedAt.localeCompare(b.publishedAt))
+              .map(({ publishedAt, estimateTime }) => ({
+                date: prettyDateString(publishedAt),
+                "Estimate Time": Number(estimateTime.split(" ")[0]),
+              }));
+
+            return (
+              <AreaChart
+                className="h-72 md:h-90 my-4"
+                data={data}
+                index="date"
+                categories={["Estimate Time"]}
+                colors={["blue-500"]}
+                intervalType="equidistantPreserveStart"
+                valueFormatter={(value) => `${value} weeks`}
+                curveType="natural"
+                showYAxis={false}
+                showXAxis={false}
+              />
+            );
+          }}
+        </Await>
+      </Suspense>
+
       <div className="flex flex-col sm:flex-row gap-x-16 gap-y-8">
-        {/*  */}
         <div className="w-full">
           <h3 className="text-lg font-medium mb-2">Interpreting this data</h3>
           <p>
