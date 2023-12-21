@@ -78,6 +78,12 @@ export function DataTable<TData, TValue>({
       pagination: {
         pageSize: 15,
       },
+      sorting: [
+        {
+          id: "countryName",
+          desc: false,
+        },
+      ],
     },
   });
 
@@ -102,6 +108,7 @@ export function DataTable<TData, TValue>({
             value={inputValue}
             onChange={onFilterChange}
             className="max-w-sm"
+            id={filterColumnAccessorKey}
           />
           <Button
             className="ml-2"
@@ -122,7 +129,7 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead className="font-semibold" key={header.id}>
+                    <TableHead className="font-semibold p-0" key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(

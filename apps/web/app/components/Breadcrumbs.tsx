@@ -52,7 +52,7 @@ export function Breadcrumbs() {
           const isLast = index === paths.length - 1;
 
           return (
-            <li className="flex flex-wrap items-center" key={`link-${index}`}>
+            <li className="flex items-center" key={`link-${index}`}>
               <Link
                 className="hover:text-gray-950 dark:hover:text-gray-50 mr-2"
                 to={isLast ? "#" : url}

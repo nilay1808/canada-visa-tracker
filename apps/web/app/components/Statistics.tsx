@@ -34,7 +34,7 @@ export const StatisticCard = ({
 }: StatisticCardProps) => {
   return (
     <Link to={link}>
-      <Card className="p-4 w-full flex flex-col items-center">
+      <Card className="p-4 w-full flex flex-col items-center hover:bg-gray-100 hover:dark:bg-gray-900">
         <div className="text-sm sm:text-md font-semibold text-gray-500 dark:text-gray-400">
           {title}
         </div>
