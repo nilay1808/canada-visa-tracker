@@ -11,7 +11,7 @@ import { getCountryName } from "~/lib/countryCodeToCountry";
 import { prettyDateString } from "~/lib/utils";
 import { Suspense } from "react";
 import { Skeleton } from "../components/ui/skeleton";
-import { AreaChart } from "@tremor/react";
+import { HistoricalTimesChart } from "../components/HistoricalTimesChart";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { visaType, countryCode } = params;
@@ -47,25 +47,14 @@ export default function Page() {
       <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
         <Await resolve={historicalData}>
           {(timelineData) => {
-            const data = [...timelineData]
-              .sort((a, b) => a.publishedAt.localeCompare(b.publishedAt))
-              .map(({ publishedAt, estimateTime }) => ({
-                date: prettyDateString(publishedAt),
-                "Estimate Time": Number(estimateTime.split(" ")[0]),
-              }));
-
+            const data = timelineData.map(({ publishedAt, estimateTime }) => ({
+              date: prettyDateString(publishedAt),
+              "Estimate Time": Number(estimateTime.split(" ")[0]),
+            }));
             return (
-              <AreaChart
-                className="h-72 md:h-90 my-4"
+              <HistoricalTimesChart
                 data={data}
-                index="date"
-                categories={["Estimate Time"]}
-                colors={["blue-500"]}
-                intervalType="equidistantPreserveStart"
-                valueFormatter={(value) => `${value} weeks`}
-                curveType="natural"
-                showYAxis={false}
-                showXAxis={false}
+                valueUnit={timelineData.at(0)!.estimateTime.split(" ")[1]}
               />
             );
           }}
