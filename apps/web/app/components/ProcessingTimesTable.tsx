@@ -20,7 +20,7 @@ const columns: ColumnDef<ProcessingTimeForCountry>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="w-full h-full justify-start px-4 rounded-none hover:bg-gray-200 hover:dark:bg-gray-800"
+          className="w-full h-full justify-start pl-2 rounded-none hover:bg-gray-200 hover:dark:bg-gray-800"
           variant="ghost"
           onClick={() => {
             const desc =
@@ -43,16 +43,13 @@ const columns: ColumnDef<ProcessingTimeForCountry>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => {
-      return <div className="px-2">{row.getValue("countryName")}</div>;
-    },
   },
   {
     accessorKey: "estimateTime",
     header: ({ column }) => {
       return (
         <Button
-          className="w-full h-full justify-start px-4 rounded-none hover:bg-gray-200 hover:dark:bg-gray-800"
+          className="w-full h-full justify-start pl-2 rounded-none hover:bg-gray-200 hover:dark:bg-gray-800"
           variant="ghost"
           onClick={() => {
             const desc =
@@ -75,14 +72,11 @@ const columns: ColumnDef<ProcessingTimeForCountry>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => {
-      return <div className="px-2">{row.getValue("estimateTime")}</div>;
-    },
   },
   {
     accessorKey: "historicalViewLink",
     header: ({ column }) => {
-      return <div className="px-4">Historical Data</div>;
+      return <div className="pl-2 sm:pl-4">Details</div>;
     },
     cell: ({ row }) => {
       return (
