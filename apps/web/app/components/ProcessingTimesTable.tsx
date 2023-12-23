@@ -1,8 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "./ui/data-table";
-import { Link, useLocation, useNavigate } from "@remix-run/react";
-import type { ChangeEvent } from "react";
-import { useCallback, useMemo } from "react";
+import { Link } from "@remix-run/react";
 import { Button } from "./ui/button";
 import {
   ArrowDownIcon,
@@ -110,35 +108,6 @@ export const ProcessingTimeTable = ({
   processingTimes,
   lastUpdated,
 }: ProcessingTimeTableProps) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const onSearchUpdate = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const pathname = location.pathname;
-      const value = event.target.value;
-
-      if (!value) {
-        navigate({
-          pathname,
-        });
-        return;
-      }
-
-      navigate({
-        pathname,
-        search: `?country=${event.target.value}`,
-      });
-    },
-    [location?.pathname, navigate]
-  );
-
-  const country = useMemo(
-    () =>
-      new URLSearchParams(location?.search ?? "").get("country") ?? undefined,
-    [location?.search]
-  );
-
   return (
     <DataTable
       title={title}
@@ -147,8 +116,6 @@ export const ProcessingTimeTable = ({
       data={processingTimes}
       filterPlaceholder="Filter by country name (E.x United States)"
       filterColumnAccessorKey="countryName"
-      onSearchUpdate={onSearchUpdate}
-      initialSearchValue={country}
     />
   );
 };

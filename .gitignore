@@ -5,3 +5,4 @@ public/build
 .env
 .turbo
 dist
+.DS_Store
