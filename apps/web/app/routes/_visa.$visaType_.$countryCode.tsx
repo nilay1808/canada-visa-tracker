@@ -28,7 +28,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   return defer({
     visaType,
     countryCode,
-    historicalData: processingTimeService.getHistoricalProcessingTimes(
+    historicalData: await processingTimeService.getHistoricalProcessingTimes(
       visaType,
       countryCode
     ),

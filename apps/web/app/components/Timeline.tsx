@@ -8,7 +8,7 @@ interface TimelineProps {
   timeline: TimelineItem[];
 }
 
-export function Timeline({ timeline: [] }: TimelineProps) {
+export function Timeline({ timeline }: TimelineProps) {
   return (
     <ol className="m-4 relative border-s border-gray-400 dark:border-gray-600">
       {timeline.map((item, i) => (
