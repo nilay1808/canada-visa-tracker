@@ -5,10 +5,10 @@
     "build": "turbo build",
     "build:web": "turbo build --filter=web",
     "build:cron": "turbo build --filter=cron",
-    "dev": "dotenv -e .env.local -- turbo dev",
+    "dev": "dotenv -e .env -- turbo dev",
     "start:web": "turbo start --filter=web",
     "start:cron": "turbo start --filter=cron",
-    "typecheck": "dotenv -e .env.local -- turbo typecheck"
+    "typecheck": "dotenv -e .env -- turbo typecheck"
   },
   "devDependencies": {
     "dotenv-cli": "^7.3.0",

@@ -1,5 +1,5 @@
 import { defer, redirect, type LoaderFunctionArgs } from "@remix-run/node";
-import { Await, useLoaderData } from "@remix-run/react";
+import { Await, Link, useLoaderData } from "@remix-run/react";
 
 import {
   assertValidVisaCategoryCode,
@@ -36,7 +36,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export default function Page() {
-  const { countryCode, historicalData } = useLoaderData<typeof loader>();
+  const { countryCode, historicalData, visaType } =
+    useLoaderData<typeof loader>();
 
   return (
     <>
@@ -64,10 +65,19 @@ export default function Page() {
       <div className="flex flex-col sm:flex-row gap-x-16 gap-y-8">
         <div className="w-full">
           <h3 className="text-lg font-medium mb-2">Interpreting this data</h3>
-          <p>
+          <p className="text-gray-900 dark:text-gray-300">
             The Canadian Govenment published updates to their processing times
-            on a weekly basis. However, this estimate is a backwards looking
-            estimate.
+            on a weekly basis. However, this estimate is just the average of the
+            processing time taken for{" "}
+            <strong>{getInfoForVisaType(visaType).title} Visas</strong>{" "}
+            submitted in <strong>{getCountryName(countryCode)}</strong> in the
+            past 8 or 16 weeks.{" "}
+            <a
+              className="text-blue-500 hover:underline"
+              href="https://ircc.canada.ca/english/helpcentre/answer.asp?qnum=1619&top=3"
+            >
+              [source]
+            </a>
           </p>
         </div>
 

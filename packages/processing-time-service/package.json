@@ -12,8 +12,6 @@
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate:pg",
-    "db:up": "docker-compose up -d",
-    "db:down": "docker-compose down",
     "db:migrate": "node dist/migrate.js"
   },
   "devDependencies": {
