@@ -89,6 +89,25 @@ export class ProcessingTimeService {
     return result?.publishedAt;
   }
 
+  async getLatestProcessingTimes(visaType: string, countryCode: string) {
+    const [result] = await db
+      .select({
+        estimateTime: processingTimesTable.estimateTime,
+        publishedAt: processingTimesTable.publishedAt,
+      })
+      .from(processingTimesTable)
+      .where(
+        and(
+          eq(processingTimesTable.visaType, visaType),
+          eq(processingTimesTable.countryCode, countryCode)
+        )
+      )
+      .orderBy(desc(processingTimesTable.publishedAt))
+      .limit(1);
+
+    return result;
+  }
+
   async getStatistics(visaType: string) {
     const latestProcessingTime = db
       .select({

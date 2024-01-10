@@ -1,5 +1,6 @@
-import { defer, redirect, type LoaderFunctionArgs } from "@remix-run/node";
-import { Await, Link, useLoaderData } from "@remix-run/react";
+import { defer, redirect } from "@remix-run/node";
+import type { MetaFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { Await, useLoaderData } from "@remix-run/react";
 
 import {
   assertValidVisaCategoryCode,
@@ -12,6 +13,18 @@ import { prettyDateString } from "~/lib/utils";
 import { Suspense } from "react";
 import { Skeleton } from "../components/ui/skeleton";
 import { HistoricalTimesChart } from "../components/HistoricalTimesChart";
+
+export const meta: MetaFunction = ({ matches, params }) => {
+  const { visaType, countryCode } = params;
+  const parentMeta = matches.flatMap((match) => match.meta ?? []).reverse();
+  return [
+    ...parentMeta,
+    {
+      property: "og:image",
+      content: `/image/${visaType}/${countryCode}`,
+    },
+  ];
+};
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { visaType, countryCode } = params;

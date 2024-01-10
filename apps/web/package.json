@@ -19,6 +19,7 @@
     "@remix-run/serve": "^2.4.0",
     "@tanstack/react-table": "^8.10.7",
     "@tremor/react": "^3.12.1",
+    "@vercel/og": "^0.6.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "isbot": "^3.7.1",
