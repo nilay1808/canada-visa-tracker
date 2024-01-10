@@ -1,5 +1,5 @@
 import { defer, redirect } from "@remix-run/node";
-import type { MetaFunction, LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Await, useLoaderData } from "@remix-run/react";
 
 import {
@@ -14,19 +14,7 @@ import { Suspense } from "react";
 import { Skeleton } from "../components/ui/skeleton";
 import { HistoricalTimesChart } from "../components/HistoricalTimesChart";
 
-export const meta: MetaFunction = ({ matches, params }) => {
-  const { visaType, countryCode } = params;
-  const parentMeta = matches.flatMap((match) => match.meta ?? []).reverse();
-  return [
-    ...parentMeta,
-    {
-      property: "og:image",
-      content: `/image/${visaType}/${countryCode}`,
-    },
-  ];
-};
-
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const { visaType, countryCode } = params;
   assertValidVisaCategoryCode(visaType);
 
@@ -38,7 +26,13 @@ export async function loader({ params }: LoaderFunctionArgs) {
     return redirect(`/${visaType}/${countryCode.toUpperCase()}`);
   }
 
+  const imageUrl = new URL(
+    `/image/${visaType}/${countryCode}.png`,
+    request.url
+  ).toString();
+
   return defer({
+    imageUrl,
     visaType,
     countryCode,
     historicalData: await processingTimeService.getHistoricalProcessingTimes(
@@ -47,6 +41,18 @@ export async function loader({ params }: LoaderFunctionArgs) {
     ),
   });
 }
+
+export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
+  const parentMeta = matches.flatMap((match) => match.meta ?? []).reverse()[0];
+
+  return [
+    parentMeta,
+    {
+      property: "og:image",
+      content: data?.imageUrl,
+    },
+  ];
+};
 
 export default function Page() {
   const { countryCode, historicalData, visaType } =
