@@ -6,7 +6,7 @@
     "build:web": "turbo build --filter=web",
     "build:cron": "turbo build --filter=cron",
     "dev": "dotenv -e .env -- turbo dev",
-    "start:web": "turbo start --filter=web",
+    "start:web": "dotenv -e .env -- turbo start --filter=web",
     "start:cron": "turbo start --filter=cron",
     "typecheck": "dotenv -e .env -- turbo typecheck"
   },
