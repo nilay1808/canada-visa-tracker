@@ -12,11 +12,18 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const visaType = params.visaType;
   assertValidVisaCategoryCode(visaType);
 
-  return defer({
-    visaType,
-    processingTimeData: processingTimeService.getProcessingTimes(visaType),
-    statsData: processingTimeService.getStatistics(visaType),
-  });
+  return defer(
+    {
+      visaType,
+      processingTimeData: processingTimeService.getProcessingTimes(visaType),
+      statsData: processingTimeService.getStatistics(visaType),
+    },
+    {
+      headers: {
+        "Cache-Control": "public, max-age=1800",
+      },
+    }
+  );
 }
 
 export default function VisaProcessingTimes() {
