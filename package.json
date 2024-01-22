@@ -12,11 +12,11 @@
   },
   "devDependencies": {
     "dotenv-cli": "^7.3.0",
-    "eslint": "^8.55.0",
-    "turbo": "^1.11.2",
+    "eslint": "^8.56.0",
+    "turbo": "^1.11.3",
     "typescript": "^5.3.3"
   },
-  "packageManager": "pnpm@8.6.6",
+  "packageManager": "pnpm@8.14.2",
   "workspaces": [
     "apps/*",
     "packages/*"
