@@ -11,7 +11,7 @@ import {
   useLocation,
 } from "@remix-run/react";
 
-import styles from "./globals.css";
+import styles from "./globals.css?url";
 import { Navbar } from "./components/Navbar";
 import { useCallback, useEffect, useState } from "react";
 import { cn } from "~/lib/utils";

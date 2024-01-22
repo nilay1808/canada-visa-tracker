@@ -81,7 +81,7 @@ const columns: ColumnDef<ProcessingTimeForCountry>[] = [
     cell: ({ row }) => {
       return (
         <Button variant="ghost" size="sm" asChild>
-          <Link to={row.getValue("historicalViewLink")}>
+          <Link prefetch="intent" to={row.getValue("historicalViewLink")}>
             View
             <ChevronRightIcon className="w-4 h-4 ml-1" />
           </Link>
