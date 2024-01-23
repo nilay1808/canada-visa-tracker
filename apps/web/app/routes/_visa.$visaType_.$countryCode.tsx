@@ -1,4 +1,4 @@
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
@@ -28,15 +28,22 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     request.url
   ).toString();
 
-  return {
-    imageUrl,
-    visaType,
-    countryCode,
-    historicalData: await processingTimeService.getHistoricalProcessingTimes(
+  return json(
+    {
+      imageUrl,
       visaType,
-      countryCode
-    ),
-  };
+      countryCode,
+      historicalData: await processingTimeService.getHistoricalProcessingTimes(
+        visaType,
+        countryCode
+      ),
+    },
+    {
+      headers: {
+        "Cache-Control": "public, max-age=1800",
+      },
+    }
+  );
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
