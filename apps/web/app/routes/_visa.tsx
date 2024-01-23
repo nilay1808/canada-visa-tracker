@@ -38,9 +38,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     return redirect("/");
   }
 
-  const publishedAt = await processingTimeService.getLatestPublishedAt(
-    visaType
-  );
+  const publishedAt = processingTimeService.getLatestPublishedAt(visaType);
 
   return defer({
     visaType,
