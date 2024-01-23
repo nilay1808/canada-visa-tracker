@@ -60,8 +60,6 @@ export default function Page() {
     "Estimate Time": Number(estimateTime.split(" ")[0]),
   }));
 
-  data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
   return (
     <>
       <h2 className="text-xl font-medium mb-4 text-gray-900 dark:text-gray-200">

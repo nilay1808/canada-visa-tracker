@@ -218,9 +218,14 @@ export class ProcessingTimeService {
       .orderBy(desc(processingTimesTable.publishedAt))
       .limit(12);
 
+    data.sort(
+      (a, b) =>
+        new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()
+    );
+
     return data.map(
       ({ publishedAt, estimateTime, countryCode, countryName, visaType }) => ({
-        publishedAt: prettyDateString(publishedAt),
+        publishedAt: prettyDateString(publishedAt)!,
         estimateTime,
         countryCode,
         countryName,
