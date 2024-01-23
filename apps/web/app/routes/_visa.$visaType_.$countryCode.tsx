@@ -1,6 +1,6 @@
 import { redirect } from "@remix-run/node";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Await, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 
 import {
   assertValidVisaCategoryCode,
@@ -10,8 +10,6 @@ import { processingTimeService } from "../ProcessingTimeData.server";
 import { Timeline } from "../components/Timeline";
 import { getCountryName } from "~/lib/countryCodeToCountry";
 import { prettyDateString } from "~/lib/utils";
-import { Suspense } from "react";
-import { Skeleton } from "../components/ui/skeleton";
 import { HistoricalTimesChart } from "../components/HistoricalTimesChart";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -43,16 +41,12 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
-  const parentMeta = matches.flatMap((match) => match.meta ?? []).reverse();
+  const parentMeta = matches.flatMap((match) => match.meta ?? []).reverse()[0];
 
   return [
-    ...parentMeta,
+    parentMeta,
     {
       property: "og:image",
-      content: data?.imageUrl,
-    },
-    {
-      property: "twitter:image",
       content: data?.imageUrl,
     },
   ];
@@ -62,28 +56,21 @@ export default function Page() {
   const { countryCode, historicalData, visaType } =
     useLoaderData<typeof loader>();
 
+  const data = historicalData.map(({ publishedAt, estimateTime }) => ({
+    date: prettyDateString(publishedAt),
+    "Estimate Time": Number(estimateTime.split(" ")[0]),
+  }));
+
   return (
     <>
       <h2 className="text-xl font-medium mb-4 text-gray-900 dark:text-gray-200">
         Historical Data for {getCountryName(countryCode)}
       </h2>
 
-      <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
-        <Await resolve={historicalData}>
-          {(timelineData) => {
-            const data = timelineData.map(({ publishedAt, estimateTime }) => ({
-              date: prettyDateString(publishedAt),
-              "Estimate Time": Number(estimateTime.split(" ")[0]),
-            }));
-            return (
-              <HistoricalTimesChart
-                data={data}
-                valueUnit={timelineData.at(0)!.estimateTime.split(" ")[1]}
-              />
-            );
-          }}
-        </Await>
-      </Suspense>
+      <HistoricalTimesChart
+        data={data}
+        valueUnit={historicalData.at(0)!.estimateTime.split(" ")[1]}
+      />
 
       <div className="flex flex-col sm:flex-row gap-x-16 gap-y-8">
         <div className="w-full">
@@ -106,21 +93,16 @@ export default function Page() {
 
         <div className="w-full">
           <h3 className="text-lg font-medium mb-2">Timeline</h3>
-          <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
-            <Await resolve={historicalData}>
-              {(timelineData) => (
-                <Timeline
-                  timeline={timelineData.map((item) => ({
-                    updatedAt: prettyDateString(item.publishedAt),
-                    title: item.estimateTime,
-                    description: `${item.countryName ?? item.countryCode} - ${
-                      getInfoForVisaType(item.visaType).title
-                    } Visa`,
-                  }))}
-                />
-              )}
-            </Await>
-          </Suspense>
+
+          <Timeline
+            timeline={historicalData.map((item) => ({
+              updatedAt: prettyDateString(item.publishedAt),
+              title: item.estimateTime,
+              description: `${item.countryName ?? item.countryCode} - ${
+                getInfoForVisaType(item.visaType).title
+              } Visa`,
+            }))}
+          />
         </div>
       </div>
     </>

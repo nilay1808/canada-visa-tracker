@@ -86,7 +86,7 @@ export class ProcessingTimeService {
       .orderBy(desc(processingTimesTable.publishedAt))
       .limit(1);
 
-    return result?.publishedAt;
+    return result?.publishedAt.toISOString();
   }
 
   async getLatestProcessingTimes(visaType: string, countryCode: string) {
@@ -105,7 +105,12 @@ export class ProcessingTimeService {
       .orderBy(desc(processingTimesTable.publishedAt))
       .limit(1);
 
-    return result;
+    return result
+      ? {
+          estimateTime: result.estimateTime,
+          publishedAt: result.publishedAt.toISOString(),
+        }
+      : undefined;
   }
 
   async getStatistics(visaType: string) {

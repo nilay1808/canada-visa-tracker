@@ -21,8 +21,10 @@ export async function loader({ params }: LoaderFunctionArgs) {
     return redirect(`/image/${visaType}/${countryCode.toUpperCase()}`);
   }
 
-  const { estimateTime, publishedAt } =
-    await processingTimeService.getLatestProcessingTimes(visaType, countryCode);
+  const result = await processingTimeService.getLatestProcessingTimes(
+    visaType,
+    countryCode
+  );
 
   return new ImageResponse(
     <div
@@ -49,14 +51,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
         }}
       >
         {getInfoForVisaType(visaType).title} Visa from{" "}
-        {getCountryName(countryCode)}: {estimateTime}
+        {getCountryName(countryCode)}: {result!.estimateTime}
       </h2>
       <p
         style={{
           fontSize: 36,
         }}
       >
-        Last Updated: {prettyDateString(publishedAt)}
+        Last Updated: {prettyDateString(result!.publishedAt)}
       </p>
     </div>
   );

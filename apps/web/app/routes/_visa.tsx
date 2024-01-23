@@ -27,14 +27,7 @@ export const meta: MetaFunction = ({ params }) => {
     title = `${title} - ${country}`;
   }
 
-  return [
-    { title },
-    { property: "og:title", content: title },
-    {
-      property: "twitter:title",
-      content: title,
-    },
-  ];
+  return [{ title }];
 };
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -46,7 +39,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
     return redirect("/");
   }
 
-  const publishedAt = processingTimeService.getLatestPublishedAt(visaType);
+  const publishedAt =
+    await processingTimeService.getLatestPublishedAt(visaType);
 
   return defer({
     visaType,
