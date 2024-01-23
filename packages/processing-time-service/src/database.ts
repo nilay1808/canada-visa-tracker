@@ -9,4 +9,4 @@ if (DATABASE_URL == null || DATABASE_URL === "") {
 
 const queryClient = postgres(DATABASE_URL);
 
-export const db = drizzle(queryClient);
+export const db = drizzle(queryClient, { logger: true });
