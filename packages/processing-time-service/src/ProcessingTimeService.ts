@@ -1,6 +1,7 @@
 import { eq, and, desc } from "drizzle-orm";
 import { processingTimesTable } from "./schema";
 import { db } from "./database";
+import { LRUCache } from "lru-cache";
 
 export interface RawProcessingTimeData {
   child_adopted: Record<string, string>;
@@ -21,7 +22,7 @@ export interface RawProcessingTimeData {
 }
 
 export class ProcessingTimeService {
-  constructor() {}
+  constructor(private readonly cache?: LRUCache<string, any>) {}
 
   async saveAllProcessingTimes(
     processingTimes: RawProcessingTimeData,
@@ -69,14 +70,24 @@ export class ProcessingTimeService {
       })
       .filter(isNotNull);
 
-    await db
+    const result = await db
       .insert(processingTimesTable)
       .values(processingTimesArray)
       .onConflictDoNothing()
       .returning();
+
+    if (result.length > 0) {
+      this.cache?.clear();
+    }
   }
 
   async getLatestPublishedAt(visaType: string) {
+    const cachedValue = this.cache?.get(`latestPublishedAt-${visaType}`);
+
+    if (cachedValue) {
+      return cachedValue;
+    }
+
     const [result] = await db
       .select({
         publishedAt: processingTimesTable.publishedAt,
@@ -86,7 +97,9 @@ export class ProcessingTimeService {
       .orderBy(desc(processingTimesTable.publishedAt))
       .limit(1);
 
-    return prettyDateString(result?.publishedAt);
+    const dateString = prettyDateString(result?.publishedAt);
+    this.cache?.set(`latestPublishedAt-${visaType}`, dateString);
+    return dateString;
   }
 
   async getLatestProcessingTimes(visaType: string, countryCode: string) {
@@ -114,6 +127,12 @@ export class ProcessingTimeService {
   }
 
   async getStatistics(visaType: string) {
+    const cachedValue = this.cache?.get(`statistics-${visaType}`);
+
+    if (cachedValue) {
+      return cachedValue;
+    }
+
     const latestProcessingTime = db
       .select({
         publishedAt: processingTimesTable.publishedAt,
@@ -144,6 +163,12 @@ export class ProcessingTimeService {
     const slowest = results[length - 1];
     const median = results[Math.floor(length / 2)];
 
+    this.cache?.set(`statistics-${visaType}`, {
+      fastest,
+      slowest,
+      median,
+    });
+
     return {
       fastest,
       slowest,
@@ -158,6 +183,12 @@ export class ProcessingTimeService {
       historicalViewLink: string;
     }[]
   > {
+    const cachedValue = this.cache?.get(`processingTimes-${visaType}`);
+
+    if (cachedValue) {
+      return cachedValue;
+    }
+
     const latestProcessingTime = db
       .select({
         publishedAt: processingTimesTable.publishedAt,
@@ -182,7 +213,7 @@ export class ProcessingTimeService {
       )
       .orderBy(processingTimesTable.countryName);
 
-    return processingTimesData
+    const result = processingTimesData
       .map((data) => {
         const { countryCode, countryName, estimateTime } = data;
 
@@ -197,9 +228,20 @@ export class ProcessingTimeService {
         };
       })
       .filter(isNotNull);
+
+    this.cache?.set(`processingTimes-${visaType}`, result);
+
+    return result;
   }
 
   async getHistoricalProcessingTimes(visaType: string, countryCode: string) {
+    const cachedValue = this.cache?.get(
+      `historicalProcessingTimes-${visaType}-${countryCode}`
+    );
+    if (cachedValue) {
+      return cachedValue;
+    }
+
     const data = await db
       .select({
         publishedAt: processingTimesTable.publishedAt,
@@ -223,7 +265,7 @@ export class ProcessingTimeService {
         new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()
     );
 
-    return data.map(
+    const result = data.map(
       ({ publishedAt, estimateTime, countryCode, countryName, visaType }) => ({
         publishedAt: prettyDateString(publishedAt)!,
         estimateTime,
@@ -232,6 +274,13 @@ export class ProcessingTimeService {
         visaType,
       })
     );
+
+    this.cache?.set(
+      `historicalProcessingTimes-${visaType}-${countryCode}`,
+      result
+    );
+
+    return result;
   }
 }
 
