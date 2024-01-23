@@ -234,7 +234,18 @@ export class ProcessingTimeService {
     return result;
   }
 
-  async getHistoricalProcessingTimes(visaType: string, countryCode: string) {
+  async getHistoricalProcessingTimes(
+    visaType: string,
+    countryCode: string
+  ): Promise<
+    {
+      publishedAt: string;
+      estimateTime: string;
+      countryCode: string;
+      countryName: string | null;
+      visaType: string;
+    }[]
+  > {
     const cachedValue = this.cache?.get(
       `historicalProcessingTimes-${visaType}-${countryCode}`
     );

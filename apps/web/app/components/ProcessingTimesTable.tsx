@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "./ui/data-table";
+import { DataTable } from "./ui/data-table.client";
 import { Link } from "@remix-run/react";
 import { Button } from "./ui/button";
 import {
