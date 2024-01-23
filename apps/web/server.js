@@ -2,7 +2,7 @@ import { createRequestHandler } from "@remix-run/express";
 import { installGlobals } from "@remix-run/node";
 import compression from "compression";
 import express from "express";
-import morgan from "morgan";
+import pino from "pino-http";
 
 installGlobals();
 
@@ -43,7 +43,7 @@ if (viteDevServer) {
 // more aggressive with this caching.
 app.use(express.static("build/client", { maxAge: "1h" }));
 
-app.use(morgan("combined"));
+app.use(pino());
 
 // handle SSR requests
 app.all("*", remixHandler);
