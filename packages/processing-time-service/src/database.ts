@@ -7,8 +7,6 @@ if (DATABASE_URL == null || DATABASE_URL === "") {
   throw new Error("DATABASE_URL is not set");
 }
 
-const queryClient = postgres(DATABASE_URL, {
-  connect_timeout: 10,
-});
+const queryClient = postgres(DATABASE_URL);
 
 export const db = drizzle(queryClient, { logger: false });
