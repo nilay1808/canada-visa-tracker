@@ -8,9 +8,12 @@
     "dev": "dotenv -e .env -- turbo dev",
     "start:web": "dotenv -e .env -- turbo start --filter=web",
     "start:cron": "turbo start --filter=cron",
-    "typecheck": "dotenv -e .env -- turbo typecheck"
+    "typecheck": "dotenv -e .env -- turbo typecheck",
+    "format": "biome format .",
+    "format:fix": "biome format . --write"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.5.3",
     "dotenv-cli": "^7.3.0",
     "eslint": "^8.56.0",
     "turbo": "^1.11.3",

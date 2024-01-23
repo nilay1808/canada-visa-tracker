@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@biomejs/biome':
+        specifier: 1.5.3
+        version: 1.5.3
       dotenv-cli:
         specifier: ^7.3.0
         version: 7.3.0
@@ -163,7 +166,7 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(ts-node@10.9.2)(typescript@5.3.3)
+        version: 8.0.1(typescript@5.3.3)
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -591,6 +594,94 @@ packages:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
     dev: true
+
+  /@biomejs/biome@1.5.3:
+    resolution: {integrity: sha512-yvZCa/g3akwTaAQ7PCwPWDCkZs3Qa5ONg/fgOUT9e6wAWsPftCjLQFPXBeGxPK30yZSSpgEmRCfpGTmVbUjGgg==}
+    engines: {node: '>=14.*'}
+    hasBin: true
+    requiresBuild: true
+    optionalDependencies:
+      '@biomejs/cli-darwin-arm64': 1.5.3
+      '@biomejs/cli-darwin-x64': 1.5.3
+      '@biomejs/cli-linux-arm64': 1.5.3
+      '@biomejs/cli-linux-arm64-musl': 1.5.3
+      '@biomejs/cli-linux-x64': 1.5.3
+      '@biomejs/cli-linux-x64-musl': 1.5.3
+      '@biomejs/cli-win32-arm64': 1.5.3
+      '@biomejs/cli-win32-x64': 1.5.3
+    dev: true
+
+  /@biomejs/cli-darwin-arm64@1.5.3:
+    resolution: {integrity: sha512-ImU7mh1HghEDyqNmxEZBoMPr8SxekkZuYcs+gynKlNW+TALQs7swkERiBLkG9NR0K1B3/2uVzlvYowXrmlW8hw==}
+    engines: {node: '>=14.*'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@biomejs/cli-darwin-x64@1.5.3:
+    resolution: {integrity: sha512-vCdASqYnlpq/swErH7FD6nrFz0czFtK4k/iLgj0/+VmZVjineFPgevOb+Sr9vz0tk0GfdQO60bSpI74zU8M9Dw==}
+    engines: {node: '>=14.*'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@biomejs/cli-linux-arm64-musl@1.5.3:
+    resolution: {integrity: sha512-DYuMizUYUBYfS0IHGjDrOP1RGipqWfMGEvNEJ398zdtmCKLXaUvTimiox5dvx4X15mBK5M2m8wgWUgOP1giUpQ==}
+    engines: {node: '>=14.*'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@biomejs/cli-linux-arm64@1.5.3:
+    resolution: {integrity: sha512-cupBQv0sNF1OKqBfx7EDWMSsKwRrBUZfjXawT4s6hKV6ALq7p0QzWlxr/sDmbKMLOaLQtw2Qgu/77N9rm+f9Rg==}
+    engines: {node: '>=14.*'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@biomejs/cli-linux-x64-musl@1.5.3:
+    resolution: {integrity: sha512-UUHiAnlDqr2Y/LpvshBFhUYMWkl2/Jn+bi3U6jKuav0qWbbBKU/ByHgR4+NBxpKBYoCtWxhnmatfH1bpPIuZMw==}
+    engines: {node: '>=14.*'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@biomejs/cli-linux-x64@1.5.3:
+    resolution: {integrity: sha512-YQrSArQvcv4FYsk7Q91Yv4uuu5F8hJyORVcv3zsjCLGkjIjx2RhjYLpTL733SNL7v33GmOlZY0eFR1ko38tuUw==}
+    engines: {node: '>=14.*'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@biomejs/cli-win32-arm64@1.5.3:
+    resolution: {integrity: sha512-HxatYH7vf/kX9nrD+pDYuV2GI9GV8EFo6cfKkahAecTuZLPxryHx1WEfJthp5eNsE0+09STGkKIKjirP0ufaZA==}
+    engines: {node: '>=14.*'}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@biomejs/cli-win32-x64@1.5.3:
+    resolution: {integrity: sha512-fMvbSouZEASU7mZH8SIJSANDm5OqsjgtVXlbUqxwed6BP7uuHRSs396Aqwh2+VoW8fwTpp6ybIUoC9FrzB0kyA==}
+    engines: {node: '>=14.*'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
 
   /@cspotcode/source-map-support@0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -7743,6 +7834,45 @@ packages:
       globby: 11.1.0
       joycon: 3.1.1
       postcss-load-config: 4.0.2(ts-node@10.9.2)
+      resolve-from: 5.0.0
+      rollup: 4.9.6
+      source-map: 0.8.0-beta.0
+      sucrase: 3.35.0
+      tree-kill: 1.2.2
+      typescript: 5.3.3
+    transitivePeerDependencies:
+      - supports-color
+      - ts-node
+    dev: true
+
+  /tsup@8.0.1(typescript@5.3.3):
+    resolution: {integrity: sha512-hvW7gUSG96j53ZTSlT4j/KL0q1Q2l6TqGBFc6/mu/L46IoNWqLLUzLRLP1R8Q7xrJTmkDxxDoojV5uCVs1sVOg==}
+    engines: {node: '>=18'}
+    hasBin: true
+    peerDependencies:
+      '@microsoft/api-extractor': ^7.36.0
+      '@swc/core': ^1
+      postcss: ^8.4.12
+      typescript: '>=4.5.0'
+    peerDependenciesMeta:
+      '@microsoft/api-extractor':
+        optional: true
+      '@swc/core':
+        optional: true
+      postcss:
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      bundle-require: 4.0.2(esbuild@0.19.11)
+      cac: 6.7.14
+      chokidar: 3.5.3
+      debug: 4.3.4
+      esbuild: 0.19.11
+      execa: 5.1.1
+      globby: 11.1.0
+      joycon: 3.1.1
+      postcss-load-config: 4.0.2(postcss@8.4.33)
       resolve-from: 5.0.0
       rollup: 4.9.6
       source-map: 0.8.0-beta.0
