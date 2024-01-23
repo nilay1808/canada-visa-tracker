@@ -8,7 +8,10 @@ interface Props {
   valueUnit: string;
 }
 
-export const HistoricalTimesChart: React.FC<Props> = ({ data, valueUnit }) => {
+export const HistoricalTimesChart: React.FC<Props> = ({
+  data = [],
+  valueUnit,
+}) => {
   return (
     <AreaChart
       className="h-72 md:h-80 my-4"
