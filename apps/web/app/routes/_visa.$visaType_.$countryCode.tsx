@@ -56,14 +56,12 @@ export default function Page() {
   const { countryCode, historicalData, visaType } =
     useLoaderData<typeof loader>();
 
-  const data = historicalData
-    .map(({ publishedAt, estimateTime }) => ({
-      date: prettyDateString(publishedAt),
-      "Estimate Time": Number(estimateTime.split(" ")[0]),
-    }))
-    .toSorted(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-    );
+  const data = historicalData.map(({ publishedAt, estimateTime }) => ({
+    date: prettyDateString(publishedAt),
+    "Estimate Time": Number(estimateTime.split(" ")[0]),
+  }));
+
+  data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   return (
     <>
