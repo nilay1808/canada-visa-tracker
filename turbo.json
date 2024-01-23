@@ -1,9 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDotEnv": [
-    ".env",
-    ".env.local"
-  ],
+  "globalDotEnv": [".env", ".env.local"],
   "pipeline": {
     "build": {
       "dotEnv": [
@@ -12,24 +9,16 @@
         ".env.production",
         ".env"
       ],
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "lint": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "typecheck": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "start": {
-      "dependsOn": [
-        "build"
-      ],
+      "dependsOn": ["build"],
       "cache": false,
       "persistent": true
     },
@@ -40,9 +29,7 @@
         ".env.development",
         ".env"
       ],
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     }

@@ -27,8 +27,8 @@ const columns: ColumnDef<ProcessingTimeForCountry>[] = [
               column.getIsSorted() === false
                 ? false
                 : column.getIsSorted() === "asc"
-                ? true
-                : undefined;
+                  ? true
+                  : undefined;
             column.toggleSorting(desc);
           }}
         >
@@ -56,8 +56,8 @@ const columns: ColumnDef<ProcessingTimeForCountry>[] = [
               column.getIsSorted() === false
                 ? false
                 : column.getIsSorted() === "asc"
-                ? true
-                : undefined;
+                  ? true
+                  : undefined;
             column.toggleSorting(desc);
           }}
         >

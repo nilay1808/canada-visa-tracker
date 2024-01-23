@@ -3,11 +3,7 @@
   "display": "Remix",
   "extends": "./base.json",
   "compilerOptions": {
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2023"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ES2023"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",

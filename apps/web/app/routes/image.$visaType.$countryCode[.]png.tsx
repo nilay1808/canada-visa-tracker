@@ -25,41 +25,39 @@ export async function loader({ params }: LoaderFunctionArgs) {
     await processingTimeService.getLatestProcessingTimes(visaType, countryCode);
 
   return new ImageResponse(
-    (
-      <div
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "white",
+        flexDirection: "column",
+      }}
+    >
+      <h1
         style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "white",
-          flexDirection: "column",
+          fontSize: 78,
         }}
       >
-        <h1
-          style={{
-            fontSize: 78,
-          }}
-        >
-          Canada Visa Tracker
-        </h1>
-        <h2
-          style={{
-            fontSize: 48,
-          }}
-        >
-          {getInfoForVisaType(visaType).title} Visa from{" "}
-          {getCountryName(countryCode)}: {estimateTime}
-        </h2>
-        <p
-          style={{
-            fontSize: 36,
-          }}
-        >
-          Last Updated: {prettyDateString(publishedAt)}
-        </p>
-      </div>
-    )
+        Canada Visa Tracker
+      </h1>
+      <h2
+        style={{
+          fontSize: 48,
+        }}
+      >
+        {getInfoForVisaType(visaType).title} Visa from{" "}
+        {getCountryName(countryCode)}: {estimateTime}
+      </h2>
+      <p
+        style={{
+          fontSize: 36,
+        }}
+      >
+        Last Updated: {prettyDateString(publishedAt)}
+      </p>
+    </div>
   );
 }
