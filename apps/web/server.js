@@ -2,7 +2,8 @@ import { createRequestHandler } from "@remix-run/express";
 import { installGlobals } from "@remix-run/node";
 import compression from "compression";
 import express from "express";
-import pino from "pino-http";
+import pinoHttp from "pino-http";
+import pino from "pino";
 
 installGlobals();
 
@@ -43,7 +44,20 @@ if (viteDevServer) {
 // more aggressive with this caching.
 app.use(express.static("build/client", { maxAge: "1h" }));
 
-app.use(pino());
+const token = process.env.LOGTAIL_SOURCE_TOKEN;
+
+const pinoOpts = token
+  ? {
+      logger: pino(
+        pino.transport({
+          target: "@logtail/pino",
+          options: { sourceToken: token },
+        })
+      ),
+    }
+  : undefined;
+
+app.use(pinoHttp(pinoOpts));
 
 // handle SSR requests
 app.all("*", remixHandler);

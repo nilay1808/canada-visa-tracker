@@ -10,6 +10,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@logtail/pino": "^0.4.19",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
@@ -26,6 +27,7 @@
     "cross-env": "^7.0.3",
     "express": "^4.18.2",
     "isbot": "^4.1.0",
+    "pino": "^8.17.2",
     "pino-http": "^9.0.0",
     "posthog-js": "^1.101.0",
     "posthog-node": "^3.5.0",
