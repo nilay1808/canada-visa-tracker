@@ -68,6 +68,9 @@ export default function App() {
       posthog.init(posthotToken, {
         api_host: "https://app.posthog.com",
         capture_pageview: false,
+        session_recording: {
+          maskAllInputs: false,
+        }
       });
     }
   }, [posthotToken]);
