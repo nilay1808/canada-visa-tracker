@@ -33,7 +33,7 @@ export const StatisticCard = ({
   link,
 }: StatisticCardProps) => {
   return (
-    <Link to={link}>
+    <Link prefetch="intent" to={link}>
       <Card className="p-4 w-full h-full flex flex-col items-center hover:bg-gray-100 hover:dark:bg-gray-900">
         <div className="text-sm sm:text-md font-semibold text-gray-500 dark:text-gray-400">
           {title}
