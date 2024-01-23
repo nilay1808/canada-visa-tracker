@@ -27,7 +27,14 @@ export const meta: MetaFunction = ({ params }) => {
     title = `${title} - ${country}`;
   }
 
-  return [{ title }];
+  return [
+    { title },
+    { property: "og:title", content: title },
+    {
+      property: "twitter:title",
+      content: title,
+    },
+  ];
 };
 
 export async function loader({ params }: LoaderFunctionArgs) {

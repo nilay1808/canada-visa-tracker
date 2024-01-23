@@ -43,12 +43,16 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
-  const parentMeta = matches.flatMap((match) => match.meta ?? []).reverse()[0];
+  const parentMeta = matches.flatMap((match) => match.meta ?? []).reverse();
 
   return [
-    parentMeta,
+    ...parentMeta,
     {
       property: "og:image",
+      content: data?.imageUrl,
+    },
+    {
+      property: "twitter:image",
       content: data?.imageUrl,
     },
   ];
