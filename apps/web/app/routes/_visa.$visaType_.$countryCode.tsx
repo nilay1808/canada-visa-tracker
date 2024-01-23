@@ -9,7 +9,6 @@ import {
 import { processingTimeService } from "../ProcessingTimeData.server";
 import { Timeline } from "../components/Timeline";
 import { getCountryName } from "~/lib/countryCodeToCountry";
-import { prettyDateString } from "~/lib/utils";
 import { HistoricalTimesChart } from "../components/HistoricalTimesChart";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -57,7 +56,7 @@ export default function Page() {
     useLoaderData<typeof loader>();
 
   const data = historicalData.map(({ publishedAt, estimateTime }) => ({
-    date: prettyDateString(publishedAt),
+    date: publishedAt,
     "Estimate Time": Number(estimateTime.split(" ")[0]),
   }));
 
@@ -98,7 +97,7 @@ export default function Page() {
 
           <Timeline
             timeline={historicalData.map((item) => ({
-              updatedAt: prettyDateString(item.publishedAt),
+              updatedAt: item.publishedAt,
               title: item.estimateTime,
               description: `${item.countryName ?? item.countryCode} - ${
                 getInfoForVisaType(item.visaType).title

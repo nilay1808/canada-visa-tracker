@@ -86,7 +86,7 @@ export class ProcessingTimeService {
       .orderBy(desc(processingTimesTable.publishedAt))
       .limit(1);
 
-    return result?.publishedAt.toISOString();
+    return prettyDateString(result?.publishedAt);
   }
 
   async getLatestProcessingTimes(visaType: string, countryCode: string) {
@@ -108,7 +108,7 @@ export class ProcessingTimeService {
     return result
       ? {
           estimateTime: result.estimateTime,
-          publishedAt: result.publishedAt.toISOString(),
+          publishedAt: prettyDateString(result.publishedAt),
         }
       : undefined;
   }
@@ -219,10 +219,47 @@ export class ProcessingTimeService {
       .orderBy(desc(processingTimesTable.publishedAt))
       .limit(12);
 
-    return data;
+    return data.map(
+      ({ publishedAt, estimateTime, countryCode, countryName, visaType }) => ({
+        publishedAt: prettyDateString(publishedAt),
+        estimateTime,
+        countryCode,
+        countryName,
+        visaType,
+      })
+    );
   }
 }
 
 function isNotNull<T>(value: T | undefined | null): value is T {
   return value != null;
+}
+
+function prettyDateString(rawDate: Date) {
+  const date = typeof rawDate === "string" ? new Date(rawDate) : rawDate;
+
+  // return parsePostgresDate(date);
+
+  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+
+  const options: Intl.DateTimeFormatOptions = {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+    timeZoneName: "shortGeneric",
+  };
+
+  return date.toLocaleDateString("en-US", options);
+}
+
+function parsePostgresDate(dateString: Date) {
+  // const parts = dateString.split("-");
+  const year = dateString.getFullYear();
+  const month = dateString.getMonth();
+  const day = dateString.getDay();
+
+  const date = new Date(Date.UTC(year, month, day, 12, 0, 0)); // Set time to noon UTC
+
+  return date;
 }

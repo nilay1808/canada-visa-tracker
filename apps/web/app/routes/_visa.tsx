@@ -7,7 +7,6 @@ import {
   getInfoForVisaType,
 } from "~/lib/VisaCategoryCodes";
 import { processingTimeService } from "../ProcessingTimeData.server";
-import { prettyDateString } from "~/lib/utils";
 import { getCountryName } from "~/lib/countryCodeToCountry";
 import { Suspense } from "react";
 import { Skeleton } from "../components/ui/skeleton";
@@ -69,7 +68,7 @@ export default function VisaLayout() {
           >
             {(publishedAt) => (
               <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Updated on {prettyDateString(publishedAt)}
+                Updated on {publishedAt}
               </h3>
             )}
           </Await>

@@ -6,7 +6,6 @@ import {
 } from "~/lib/VisaCategoryCodes";
 import { getCountryName } from "~/lib/countryCodeToCountry";
 import { processingTimeService } from "../ProcessingTimeData.server";
-import { prettyDateString } from "~/lib/utils";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { visaType, countryCode } = params;
@@ -58,7 +57,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
           fontSize: 36,
         }}
       >
-        Last Updated: {prettyDateString(result!.publishedAt)}
+        Last Updated: {result!.publishedAt}
       </p>
     </div>
   );
