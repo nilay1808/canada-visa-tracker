@@ -56,6 +56,7 @@ export function Breadcrumbs() {
               <Link
                 className="hover:text-gray-950 dark:hover:text-gray-50 mr-2"
                 to={isLast ? "#" : url}
+                prefetch="intent"
               >
                 {name}
               </Link>

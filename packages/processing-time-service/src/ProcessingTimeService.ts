@@ -1,6 +1,7 @@
 import { eq, and, desc } from "drizzle-orm";
 import { processingTimesTable } from "./schema";
 import { db } from "./database";
+import { LRUCache } from "lru-cache";
 
 export interface RawProcessingTimeData {
   child_adopted: Record<string, string>;
@@ -21,7 +22,7 @@ export interface RawProcessingTimeData {
 }
 
 export class ProcessingTimeService {
-  constructor() {}
+  constructor(private readonly cache?: LRUCache<string, any>) {}
 
   async saveAllProcessingTimes(
     processingTimes: RawProcessingTimeData,
@@ -69,14 +70,24 @@ export class ProcessingTimeService {
       })
       .filter(isNotNull);
 
-    await db
+    const result = await db
       .insert(processingTimesTable)
       .values(processingTimesArray)
       .onConflictDoNothing()
       .returning();
+
+    if (result.length > 0) {
+      this.cache?.clear();
+    }
   }
 
   async getLatestPublishedAt(visaType: string) {
+    const cachedValue = this.cache?.get(`latestPublishedAt-${visaType}`);
+
+    if (cachedValue) {
+      return cachedValue;
+    }
+
     const [result] = await db
       .select({
         publishedAt: processingTimesTable.publishedAt,
@@ -86,10 +97,42 @@ export class ProcessingTimeService {
       .orderBy(desc(processingTimesTable.publishedAt))
       .limit(1);
 
-    return result?.publishedAt;
+    const dateString = prettyDateString(result?.publishedAt);
+    this.cache?.set(`latestPublishedAt-${visaType}`, dateString);
+    return dateString;
+  }
+
+  async getLatestProcessingTimes(visaType: string, countryCode: string) {
+    const [result] = await db
+      .select({
+        estimateTime: processingTimesTable.estimateTime,
+        publishedAt: processingTimesTable.publishedAt,
+      })
+      .from(processingTimesTable)
+      .where(
+        and(
+          eq(processingTimesTable.visaType, visaType),
+          eq(processingTimesTable.countryCode, countryCode)
+        )
+      )
+      .orderBy(desc(processingTimesTable.publishedAt))
+      .limit(1);
+
+    return result
+      ? {
+          estimateTime: result.estimateTime,
+          publishedAt: prettyDateString(result.publishedAt),
+        }
+      : undefined;
   }
 
   async getStatistics(visaType: string) {
+    const cachedValue = this.cache?.get(`statistics-${visaType}`);
+
+    if (cachedValue) {
+      return cachedValue;
+    }
+
     const latestProcessingTime = db
       .select({
         publishedAt: processingTimesTable.publishedAt,
@@ -105,7 +148,6 @@ export class ProcessingTimeService {
         countryCode: processingTimesTable.countryCode,
         countryName: processingTimesTable.countryName,
         estimateTime: processingTimesTable.estimateTime,
-        publishedAt: processingTimesTable.publishedAt,
       })
       .from(processingTimesTable)
       .where(eq(processingTimesTable.visaType, visaType))
@@ -121,6 +163,12 @@ export class ProcessingTimeService {
     const slowest = results[length - 1];
     const median = results[Math.floor(length / 2)];
 
+    this.cache?.set(`statistics-${visaType}`, {
+      fastest,
+      slowest,
+      median,
+    });
+
     return {
       fastest,
       slowest,
@@ -135,6 +183,12 @@ export class ProcessingTimeService {
       historicalViewLink: string;
     }[]
   > {
+    const cachedValue = this.cache?.get(`processingTimes-${visaType}`);
+
+    if (cachedValue) {
+      return cachedValue;
+    }
+
     const latestProcessingTime = db
       .select({
         publishedAt: processingTimesTable.publishedAt,
@@ -159,7 +213,7 @@ export class ProcessingTimeService {
       )
       .orderBy(processingTimesTable.countryName);
 
-    return processingTimesData
+    const result = processingTimesData
       .map((data) => {
         const { countryCode, countryName, estimateTime } = data;
 
@@ -174,9 +228,31 @@ export class ProcessingTimeService {
         };
       })
       .filter(isNotNull);
+
+    this.cache?.set(`processingTimes-${visaType}`, result);
+
+    return result;
   }
 
-  async getHistoricalProcessingTimes(visaType: string, countryCode: string) {
+  async getHistoricalProcessingTimes(
+    visaType: string,
+    countryCode: string
+  ): Promise<
+    {
+      publishedAt: string;
+      estimateTime: string;
+      countryCode: string;
+      countryName: string | null;
+      visaType: string;
+    }[]
+  > {
+    const cachedValue = this.cache?.get(
+      `historicalProcessingTimes-${visaType}-${countryCode}`
+    );
+    if (cachedValue) {
+      return cachedValue;
+    }
+
     const data = await db
       .select({
         publishedAt: processingTimesTable.publishedAt,
@@ -195,10 +271,49 @@ export class ProcessingTimeService {
       .orderBy(desc(processingTimesTable.publishedAt))
       .limit(12);
 
-    return data;
+    data.sort(
+      (a, b) =>
+        new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()
+    );
+
+    const result = data.map(
+      ({ publishedAt, estimateTime, countryCode, countryName, visaType }) => ({
+        publishedAt: prettyDateString(publishedAt)!,
+        estimateTime,
+        countryCode,
+        countryName,
+        visaType,
+      })
+    );
+
+    this.cache?.set(
+      `historicalProcessingTimes-${visaType}-${countryCode}`,
+      result
+    );
+
+    return result;
   }
 }
 
 function isNotNull<T>(value: T | undefined | null): value is T {
   return value != null;
+}
+
+function prettyDateString(rawDate: Date) {
+  if (rawDate == null) {
+    return;
+  }
+
+  const date = typeof rawDate === "string" ? new Date(rawDate) : rawDate;
+  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+
+  const options: Intl.DateTimeFormatOptions = {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+    timeZoneName: "shortGeneric",
+  };
+
+  return date.toLocaleDateString("en-US", options);
 }

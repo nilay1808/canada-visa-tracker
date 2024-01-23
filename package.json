@@ -5,18 +5,21 @@
     "build": "turbo build",
     "build:web": "turbo build --filter=web",
     "build:cron": "turbo build --filter=cron",
-    "dev": "dotenv -e .env.local -- turbo dev",
-    "start:web": "turbo start --filter=web",
+    "dev": "dotenv -e .env -- turbo dev",
+    "start:web": "dotenv -e .env -- turbo start --filter=web",
     "start:cron": "turbo start --filter=cron",
-    "typecheck": "dotenv -e .env.local -- turbo typecheck"
+    "typecheck": "dotenv -e .env -- turbo typecheck",
+    "format": "biome format .",
+    "format:fix": "biome format . --write"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.5.3",
     "dotenv-cli": "^7.3.0",
-    "eslint": "^8.55.0",
-    "turbo": "^1.11.2",
+    "eslint": "^8.56.0",
+    "turbo": "^1.11.3",
     "typescript": "^5.3.3"
   },
-  "packageManager": "pnpm@8.6.6",
+  "packageManager": "pnpm@8.14.2",
   "workspaces": [
     "apps/*",
     "packages/*"

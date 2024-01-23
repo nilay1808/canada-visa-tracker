@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "./ui/data-table";
+import { DataTable } from "./ui/data-table.client";
 import { Link } from "@remix-run/react";
 import { Button } from "./ui/button";
 import {
@@ -27,8 +27,8 @@ const columns: ColumnDef<ProcessingTimeForCountry>[] = [
               column.getIsSorted() === false
                 ? false
                 : column.getIsSorted() === "asc"
-                ? true
-                : undefined;
+                  ? true
+                  : undefined;
             column.toggleSorting(desc);
           }}
         >
@@ -56,8 +56,8 @@ const columns: ColumnDef<ProcessingTimeForCountry>[] = [
               column.getIsSorted() === false
                 ? false
                 : column.getIsSorted() === "asc"
-                ? true
-                : undefined;
+                  ? true
+                  : undefined;
             column.toggleSorting(desc);
           }}
         >
@@ -81,7 +81,7 @@ const columns: ColumnDef<ProcessingTimeForCountry>[] = [
     cell: ({ row }) => {
       return (
         <Button variant="ghost" size="sm" asChild>
-          <Link to={row.getValue("historicalViewLink")}>
+          <Link prefetch="intent" to={row.getValue("historicalViewLink")}>
             View
             <ChevronRightIcon className="w-4 h-4 ml-1" />
           </Link>

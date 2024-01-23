@@ -19,7 +19,7 @@ export default function Index() {
     <div className="sm:mt-8">
       <div className="mb-12">
         <h1 className="text-2xl font-medium mb-1">
-          Check Processing Times for all Canada Visas
+          Check processing times for Canadian visas
         </h1>
         <p className="text-gray-700 dark:text-gray-400">
           This is an unofficial website that shows the latest and historical

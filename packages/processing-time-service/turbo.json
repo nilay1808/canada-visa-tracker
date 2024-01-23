@@ -1,37 +1,20 @@
 {
-  "extends": [
-    "//"
-  ],
+  "extends": ["//"],
   "pipeline": {
     "db:generate": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": false
     },
     "db:migrate": {
-      "dependsOn": [
-        "db:generate",
-        "build"
-      ]
+      "dependsOn": ["db:generate", "build"]
     },
     "build": {
-      "dependsOn": [
-        "db:generate",
-        "^build"
-      ],
-      "outputs": [
-        "dist/**"
-      ]
+      "dependsOn": ["db:generate", "^build"],
+      "outputs": ["dist/**"]
     },
     "dev": {
-      "dependsOn": [
-        "build",
-        "db:up",
-        "db:migrate"
-      ],
+      "dependsOn": ["build", "db:migrate"],
       "persistent": true
-    },
-    "db:up": {}
+    }
   }
 }

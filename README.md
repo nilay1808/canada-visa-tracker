@@ -14,7 +14,8 @@ This is a simple web application to track the processing times for different Can
 
 ## Development
 
-Getting started should be easy, you will need Node.js 18+, PNPM, and Docker installed.
+Getting started should be easy, you will need Node.js 18+, PNPM, and a Postgres database.
 
-1. Install dependencies using `pnpm i`
-2. Start the database using `pnpm dev` should start the database, run migrations, and start all the services.
+1. Make a `.env` file in the root similar to `.env.example` and fill in the values.
+2. Install dependencies using `pnpm i`.
+3. Start the dev server with `pnpm dev`.

@@ -12,9 +12,7 @@ export const HistoricalTimesChart: React.FC<Props> = ({ data, valueUnit }) => {
   return (
     <AreaChart
       className="h-72 md:h-80 my-4"
-      data={data.toSorted(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-      )}
+      data={data}
       index="date"
       categories={["Estimate Time"]}
       intervalType="preserveStartEnd"

@@ -1,5 +1,4 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
-import { json, type LinksFunction, type MetaFunction } from "@remix-run/node";
+import { json, type MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -11,7 +10,6 @@ import {
   useLocation,
 } from "@remix-run/react";
 
-import styles from "./globals.css";
 import { Navbar } from "./components/Navbar";
 import { useCallback, useEffect, useState } from "react";
 import { cn } from "~/lib/utils";
@@ -23,10 +21,7 @@ import {
 } from "./components/DarkMode.client";
 import posthog from "posthog-js";
 
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: styles },
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
+import "./globals.css";
 
 export const meta: MetaFunction = () => {
   return [
