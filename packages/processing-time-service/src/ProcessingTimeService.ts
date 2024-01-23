@@ -129,7 +129,6 @@ export class ProcessingTimeService {
         countryCode: processingTimesTable.countryCode,
         countryName: processingTimesTable.countryName,
         estimateTime: processingTimesTable.estimateTime,
-        publishedAt: processingTimesTable.publishedAt,
       })
       .from(processingTimesTable)
       .where(eq(processingTimesTable.visaType, visaType))
