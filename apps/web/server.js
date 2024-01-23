@@ -43,7 +43,7 @@ if (viteDevServer) {
 // more aggressive with this caching.
 app.use(express.static("build/client", { maxAge: "1h" }));
 
-app.use(morgan("tiny"));
+app.use(morgan("combined"));
 
 // handle SSR requests
 app.all("*", remixHandler);
