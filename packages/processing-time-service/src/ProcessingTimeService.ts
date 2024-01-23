@@ -236,10 +236,11 @@ function isNotNull<T>(value: T | undefined | null): value is T {
 }
 
 function prettyDateString(rawDate: Date) {
+  if (rawDate == null) {
+    return;
+  }
+
   const date = typeof rawDate === "string" ? new Date(rawDate) : rawDate;
-
-  // return parsePostgresDate(date);
-
   date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
 
   const options: Intl.DateTimeFormatOptions = {
@@ -251,15 +252,4 @@ function prettyDateString(rawDate: Date) {
   };
 
   return date.toLocaleDateString("en-US", options);
-}
-
-function parsePostgresDate(dateString: Date) {
-  // const parts = dateString.split("-");
-  const year = dateString.getFullYear();
-  const month = dateString.getMonth();
-  const day = dateString.getDay();
-
-  const date = new Date(Date.UTC(year, month, day, 12, 0, 0)); // Set time to noon UTC
-
-  return date;
 }

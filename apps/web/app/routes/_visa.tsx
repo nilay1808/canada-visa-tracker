@@ -38,8 +38,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
     return redirect("/");
   }
 
-  const publishedAt =
-    await processingTimeService.getLatestPublishedAt(visaType);
+  const publishedAt = await processingTimeService.getLatestPublishedAt(
+    visaType
+  );
 
   return defer({
     visaType,
@@ -68,7 +69,9 @@ export default function VisaLayout() {
           >
             {(publishedAt) => (
               <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Updated on {publishedAt}
+                {publishedAt
+                  ? `Updated on ${publishedAt}`
+                  : "No data available"}
               </h3>
             )}
           </Await>
