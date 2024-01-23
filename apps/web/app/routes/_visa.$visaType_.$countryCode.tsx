@@ -1,4 +1,4 @@
-import { defer, redirect } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Await, useLoaderData } from "@remix-run/react";
 
@@ -31,7 +31,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     request.url
   ).toString();
 
-  return defer({
+  return {
     imageUrl,
     visaType,
     countryCode,
@@ -39,7 +39,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       visaType,
       countryCode
     ),
-  });
+  };
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
