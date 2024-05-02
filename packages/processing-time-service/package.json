@@ -15,14 +15,14 @@
     "db:migrate": "node dist/migrate.js"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.20.13",
+    "drizzle-kit": "^0.20.17",
     "tsconfig": "workspace:*",
-    "tsup": "^8.0.1",
-    "typescript": "^5.3.3"
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
-    "drizzle-orm": "^0.29.3",
-    "lru-cache": "^10.1.0",
-    "postgres": "^3.4.3"
+    "drizzle-orm": "^0.29.5",
+    "lru-cache": "^10.2.2",
+    "postgres": "^3.4.4"
   }
 }
